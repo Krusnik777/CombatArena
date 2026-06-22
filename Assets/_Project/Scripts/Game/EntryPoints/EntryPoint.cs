@@ -1,0 +1,11 @@
+using DI;
+using R3;
+using UnityEngine;
+
+namespace CombatArena.Game.EntryPoints
+{
+    public abstract class EntryPoint : MonoBehaviour
+    {
+        public abstract Observable<string> Run(DIContainer sceneContainer);
+    }
+}
