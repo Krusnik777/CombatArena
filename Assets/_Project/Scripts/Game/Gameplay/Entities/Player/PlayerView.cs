@@ -1,0 +1,10 @@
+using UnityEngine;
+
+namespace CombatArena.Game.Gameplay.Entities.Player
+{
+    public class PlayerView : MonoBehaviour
+    {
+        [field: SerializeField] public PlayerAvatarMovement Movement { get; private set; }
+        [field: SerializeField] public PlayerAvatarAnimator Animator { get; private set; }
+    }
+}

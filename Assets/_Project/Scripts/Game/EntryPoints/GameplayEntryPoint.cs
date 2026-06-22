@@ -4,12 +4,16 @@ using CombatArena.Game.Services;
 using UI;
 using R3;
 using UnityEngine;
+using CombatArena.Game.Gameplay.Entities.Player;
+using CombatArena.Game.Gameplay;
+
 
 namespace CombatArena.Game.EntryPoints
 {
     public class GameplayEntryPoint : EntryPoint
     {
         [SerializeField] private UISceneRootView m_sceneUIRootPrefab;
+        [SerializeField] private PlayerView m_playerView;
 
         private Subject<string> _onEnd;
 
@@ -18,6 +22,15 @@ namespace CombatArena.Game.EntryPoints
             Debug.Log("ENTRY POINT: Started Gameplay");
 
             _onEnd = new();
+
+            var abilitiesFactory = new AbilitiesFactory();
+            var abilitiesProvider = sceneContainer.Resolve<AbilityConfigsProvider>();
+            var abilitiesBundleCreator = new AbilitiesBundleCreator(abilitiesFactory, abilitiesProvider.AbilitiesCollection);
+
+            var gameInputService = sceneContainer.Resolve<GameInputService>();
+            var playerAvatarConfig = sceneContainer.Resolve<PlayerAvatarConfigProvider>().Config;
+            var player = new Player(m_playerView, playerAvatarConfig, gameInputService, abilitiesBundleCreator.Create());
+            sceneContainer.RegisterInstance(player);
             
             SetupUI(sceneContainer);
 

@@ -39,11 +39,12 @@ namespace CombatArena.Game.Root
 
             SetupAudioService();
             SetupInputServices();
+            SetupProviders();
         }
 
         private /*async*/ void RunGame()
         {
-#if UNITY_EDITOR
+            #if UNITY_EDITOR
 
             var sceneName = SceneManager.GetActiveScene().name;
 
@@ -59,8 +60,8 @@ namespace CombatArena.Game.Root
             {
                 return;
             }
-
-#endif
+            
+            #endif
 
             _coroutines.StartCoroutine(LoadAndStartGameplay());
         }
@@ -134,6 +135,15 @@ namespace CombatArena.Game.Root
 
             var gameInputService = new GameInputService();
             _rootContainer.RegisterInstance(gameInputService);
+        }
+
+        private void SetupProviders()
+        {
+            var playerAvatarConfigProvider = new PlayerAvatarConfigProvider();
+            _rootContainer.RegisterInstance(playerAvatarConfigProvider);
+
+            var abilityConfigsProvider = new AbilityConfigsProvider();
+            _rootContainer.RegisterInstance(abilityConfigsProvider);
         }
 
         #endregion
