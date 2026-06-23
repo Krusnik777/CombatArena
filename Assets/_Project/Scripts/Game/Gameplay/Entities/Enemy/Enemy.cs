@@ -58,6 +58,9 @@ namespace CombatArena.Game.Gameplay.Entities.Enemy
 
         private void TakeDamage(Damage damage)
         {
+            bool isBlocked = UnityEngine.Random.value >= 1 - _config.ArmorDefenceChance;
+            if (isBlocked) damage.Modifiers.Add(new ArmorDefenceModifier(_config.Armor));
+
             Health.TakeDamage(damage);
         }
     }

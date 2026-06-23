@@ -19,6 +19,6 @@ MonoBehaviour:
   <Cooldown>k__BackingField: 20
   <AttackType>k__BackingField: 1
   <Damage>k__BackingField: 100
-  <Range>k__BackingField: 3
+  <Range>k__BackingField: 3.5
   <CriticalChance>k__BackingField: 0.25
   <ArmorBreakChance>k__BackingField: 0.15

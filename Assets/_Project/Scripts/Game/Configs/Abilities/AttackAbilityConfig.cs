@@ -13,7 +13,7 @@ namespace CombatArena.Game.Configs
     {
         [field: SerializeField] public AttackType AttackType { get; private set; }
         [field: SerializeField] public int Damage { get ; private set; } = 1;
-        [field: SerializeField] public int Range { get ; private set; } = 3;
+        [field: SerializeField] public float Range { get ; private set; } = 3;
         [field: SerializeField][field: Range(0f, 1f)] public float CriticalChance { get; private set; } = 0.15f;
         [field: SerializeField][field: Range(0f, 1f)] public float ArmorBreakChance { get; private set; } = 0.15f;
 
@@ -26,7 +26,7 @@ namespace CombatArena.Game.Configs
             base.OnValidate();
 
             if (Damage < 1) Damage = 1;
-            if (Range < 1) Range = 1;
+            if (Range < 0) Range = 1;
         }
 
         #endif

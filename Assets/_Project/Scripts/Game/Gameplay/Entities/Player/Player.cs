@@ -16,7 +16,7 @@ namespace CombatArena.Game.Gameplay.Entities.Player
         private PlayerHealthConfig _healthConfig;
 
         private Ability _currentActiveAbility;
-        private DamageDealer _currentDamageDealer;
+        private IDamageDealer _currentDamageDealer;
 
         private CompositeDisposable _abilitiesInputListenerDisposable;
         private CompositeDisposable _attackListenerDisposable;
@@ -78,18 +78,16 @@ namespace CombatArena.Game.Gameplay.Entities.Player
                 finishedAttack?.OnNext(true);
             }));
 
-            _currentDamageDealer = new DamageDealer(_view.transform, config, _view.EventsCollector);
-
             if (config.AttackType == AttackType.HorizontalSlash)
             {
-                // Create Damage Handler which workd from start to finish
+                _currentDamageDealer = new SwordDamageDealer(Root.LayerMasks.Enemy, _view.Movement.LookTransform, config, _view.EventsCollector, _view.SwordTransform);
 
                 _view.Animator.PlaySimpleAttack();
             }
 
             if (config.AttackType == AttackType.JumpAttack)
             {
-                // Create Damage Handler which look for OnExecuted
+                _currentDamageDealer = new AOEDamageDealer(Root.LayerMasks.Enemy, _view.transform, config, _view.EventsCollector);
 
                 _view.Animator.PlaySuperAttack();
             }

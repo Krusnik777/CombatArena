@@ -11,11 +11,14 @@ namespace CombatArena.Game.Gameplay.Entities.Player
         [SerializeField] private CharacterController m_characterController;
         [SerializeField] private Transform m_viewTransform;
 
+        public Vector3 DirectionControl => _directionControl;
+
+        public Transform LookTransform => m_viewTransform;
+
         private GameInputService _gameInputService;
         private PlayerAvatarConfig _config;
 
         private Vector3 _directionControl;
-        public Vector3 DirectionControl => _directionControl;
 
         private bool _isActive = true;
 

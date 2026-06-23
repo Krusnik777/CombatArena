@@ -147,6 +147,9 @@ namespace CombatArena.Game.Root
 
             var enemyConfigsProvider = new EnemyConfigsProvider();
             _rootContainer.RegisterInstance(enemyConfigsProvider);
+
+            var damageableMasksLoader = new DamageableMasksLoader();
+            damageableMasksLoader.LoadMasksAndAssignToLayerMasks();
         }
 
         #endregion
