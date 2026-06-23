@@ -16,7 +16,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 25e12bf5072d88d4792ba69d87c22674, type: 2}
   - {fileID: 11400000, guid: 84a542643f03bb549895e35ca865ba77, type: 2}
   - {fileID: 11400000, guid: 6a962f31a72dc004b9de3ac57fea9b23, type: 2}
-  <DefaultAbilitiesBundle>k__BackingField:
+  <DefaultPlayerAbilities>k__BackingField:
     AbilityA: {fileID: 11400000, guid: 25e12bf5072d88d4792ba69d87c22674, type: 2}
     AbilityX: {fileID: 11400000, guid: 84a542643f03bb549895e35ca865ba77, type: 2}
     AbilityY: {fileID: 11400000, guid: 6a962f31a72dc004b9de3ac57fea9b23, type: 2}

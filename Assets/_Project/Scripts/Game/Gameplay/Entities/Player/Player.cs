@@ -1,76 +1,142 @@
 using System;
 using CombatArena.Game.Configs;
+using CombatArena.Game.Gameplay.HealthSystem;
 using CombatArena.Game.Services;
 using R3;
-using UnityEngine;
 
 namespace CombatArena.Game.Gameplay.Entities.Player
 {
     public class Player : IDisposable, IAbilityAttacker, IAbilityMover
     {
+        public PlayerAbilities Abilities { get; private set; }
+        public Health Health { get; }
+
         private PlayerView _view;
-        private AbilitiesBundle _abilities;
-        // also Health or something
+        private GameInputService _gameInputService;
+        private PlayerHealthConfig _healthConfig;
 
         private Ability _currentActiveAbility;
+        private DamageDealer _currentDamageDealer;
 
-        private CompositeDisposable _testDisposable;
+        private CompositeDisposable _abilitiesInputListenerDisposable;
+        private CompositeDisposable _attackListenerDisposable;
 
-        public Player(PlayerView view, PlayerAvatarConfig config, GameInputService gameInputService, AbilitiesBundle abilitiesBundle)
+        public Player(PlayerView view, PlayerConfigsProvider configsProvider, GameInputService gameInputService)
         {
             _view = view;
-            _view.Movement.Bind(config, gameInputService);
+            _gameInputService = gameInputService;
+            _healthConfig = configsProvider.HealthConfig;
 
-            _abilities = abilitiesBundle;
-            _currentActiveAbility = null;
+            _view.Movement.Bind(configsProvider.AvatarConfig, gameInputService);
+            _view.Animator.Bind(_view.Movement);
 
-            _testDisposable = new()
-            {
-                gameInputService.OnAbilityAPressed.Subscribe(_ => HandleAbilityA()),
-                gameInputService.OnAbilityXPressed.Subscribe(_ => HandleAbilityX()),
-                gameInputService.OnAbilityYPressed.Subscribe(_ => HandleAbilityY())
-            };
+            Health = new Health(new DamageProcessor(), _healthConfig.MaxHealth);
         }
 
         public void Dispose()
         {
-            _testDisposable?.Dispose();
+            _abilitiesInputListenerDisposable?.Dispose();
+            _attackListenerDisposable?.Dispose();
+            Abilities?.Dispose();
+            _currentDamageDealer?.Dispose();
+        }
+
+        public void AssignAbilities(PlayerAbilities abilitiesBundle)
+        {
+            Abilities = abilitiesBundle;
+            _currentActiveAbility = null;
+
+            _abilitiesInputListenerDisposable?.Dispose();
+
+            _abilitiesInputListenerDisposable = new()
+            {
+                _gameInputService.OnAbilityAPressed.Subscribe(_ => HandleAbilityAUse()),
+                _gameInputService.OnAbilityXPressed.Subscribe(_ => HandleAbilityXUse()),
+                _gameInputService.OnAbilityYPressed.Subscribe(_ => HandleAbilityYUse())
+            };
         }
 
         public Observable<bool> Attack(AttackAbilityConfig config)
         {
-            if (config.AttackType == AttackType.HorizontalSlash) _view.Animator.PlaySimpleAttack();
-            else if (config.AttackType == AttackType.JumpAttack) _view.Animator.PlaySuperAttack();
+            var finishedAttack = new Subject<bool>();
 
-            throw new NotImplementedException();
+            _attackListenerDisposable?.Dispose();
+            _currentDamageDealer?.Dispose();
+            _attackListenerDisposable = new();
+
+            _view.Movement.SetActive(false);
+            _attackListenerDisposable.Add(_view.EventsCollector.OnAttackFinish.Subscribe(_ =>
+            {
+                _attackListenerDisposable?.Dispose();
+                _currentDamageDealer?.Dispose();
+
+                _view.Movement.SetActive(true);
+
+                _currentActiveAbility = null;
+                _currentDamageDealer = null;
+
+                finishedAttack?.OnNext(true);
+            }));
+
+            _currentDamageDealer = new DamageDealer(_view.transform, config, _view.EventsCollector);
+
+            if (config.AttackType == AttackType.HorizontalSlash)
+            {
+                // Create Damage Handler which workd from start to finish
+
+                _view.Animator.PlaySimpleAttack();
+            }
+
+            if (config.AttackType == AttackType.JumpAttack)
+            {
+                // Create Damage Handler which look for OnExecuted
+
+                _view.Animator.PlaySuperAttack();
+            }
+
+            return finishedAttack;
         }
 
         public Observable<bool> Dash(DashAbilityConfig config)
         {
-            _view.Movement.PerformDash(config);
+            var finishedDash = new Subject<bool>();
 
-            throw new NotImplementedException();
+            // Enable Invulnerability
+            // Show Dash Effect
+            // Play Dash Sound
+
+            _view.Movement.PerformDash(config, () =>
+            {
+                // Disable Invulnerability
+                // Stop Dash Effect
+
+                _currentActiveAbility = null;
+
+                finishedDash?.OnNext(true);
+            });
+
+            return finishedDash;
         }
 
-        private void HandleAbilityA()
+        private void HandleAbilityAUse()
         {
             if (_currentActiveAbility != null) return;
 
-            _abilities.AbilityA.Use();
+            if (Abilities.AbilityA.TryUse()) _currentActiveAbility = Abilities.AbilityA;
         }
 
-        private void HandleAbilityX()
+        private void HandleAbilityXUse()
         {
             if (_currentActiveAbility != null) return;
 
-            _abilities.AbilityX.Use();
+            if (Abilities.AbilityX.TryUse()) _currentActiveAbility = Abilities.AbilityX;
         }
 
-        private void HandleAbilityY()
+        private void HandleAbilityYUse()
         {
             if (_currentActiveAbility != null) return;
 
-            _abilities.AbilityY.Use();
+            if (Abilities.AbilityY.TryUse()) _currentActiveAbility = Abilities.AbilityY;
         }
     }
 }

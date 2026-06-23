@@ -139,11 +139,14 @@ namespace CombatArena.Game.Root
 
         private void SetupProviders()
         {
-            var playerAvatarConfigProvider = new PlayerAvatarConfigProvider();
+            var playerAvatarConfigProvider = new PlayerConfigsProvider();
             _rootContainer.RegisterInstance(playerAvatarConfigProvider);
 
             var abilityConfigsProvider = new AbilityConfigsProvider();
             _rootContainer.RegisterInstance(abilityConfigsProvider);
+
+            var enemyConfigsProvider = new EnemyConfigsProvider();
+            _rootContainer.RegisterInstance(enemyConfigsProvider);
         }
 
         #endregion

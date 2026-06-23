@@ -147,6 +147,15 @@ namespace CombatArena
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Test"",
+                    ""type"": ""Button"",
+                    ""id"": ""dbc3b311-c4b3-432e-ac24-13a642106dd4"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -402,6 +411,17 @@ namespace CombatArena
                     ""action"": ""AbilityB"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6449bbbb-84ed-425d-958b-5cafc522a559"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Test"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -431,7 +451,7 @@ namespace CombatArena
                     ""name"": ""Cancel"",
                     ""type"": ""Button"",
                     ""id"": ""15cef263-9014-4fd5-94d9-4e4a6234a6ef"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -993,6 +1013,7 @@ namespace CombatArena
             m_Player_AbilityB = m_Player.FindAction("AbilityB", throwIfNotFound: true);
             m_Player_AbilityX = m_Player.FindAction("AbilityX", throwIfNotFound: true);
             m_Player_AbilityY = m_Player.FindAction("AbilityY", throwIfNotFound: true);
+            m_Player_Test = m_Player.FindAction("Test", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
             m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1092,6 +1113,7 @@ namespace CombatArena
         private readonly InputAction m_Player_AbilityB;
         private readonly InputAction m_Player_AbilityX;
         private readonly InputAction m_Player_AbilityY;
+        private readonly InputAction m_Player_Test;
         /// <summary>
         /// Provides access to input actions defined in input action map "Player".
         /// </summary>
@@ -1127,6 +1149,10 @@ namespace CombatArena
             /// Provides access to the underlying input action "Player/AbilityY".
             /// </summary>
             public InputAction @AbilityY => m_Wrapper.m_Player_AbilityY;
+            /// <summary>
+            /// Provides access to the underlying input action "Player/Test".
+            /// </summary>
+            public InputAction @Test => m_Wrapper.m_Player_Test;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -1171,6 +1197,9 @@ namespace CombatArena
                 @AbilityY.started += instance.OnAbilityY;
                 @AbilityY.performed += instance.OnAbilityY;
                 @AbilityY.canceled += instance.OnAbilityY;
+                @Test.started += instance.OnTest;
+                @Test.performed += instance.OnTest;
+                @Test.canceled += instance.OnTest;
             }
 
             /// <summary>
@@ -1200,6 +1229,9 @@ namespace CombatArena
                 @AbilityY.started -= instance.OnAbilityY;
                 @AbilityY.performed -= instance.OnAbilityY;
                 @AbilityY.canceled -= instance.OnAbilityY;
+                @Test.started -= instance.OnTest;
+                @Test.performed -= instance.OnTest;
+                @Test.canceled -= instance.OnTest;
             }
 
             /// <summary>
@@ -1542,6 +1574,13 @@ namespace CombatArena
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnAbilityY(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Test" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnTest(InputAction.CallbackContext context);
         }
         /// <summary>
         /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.

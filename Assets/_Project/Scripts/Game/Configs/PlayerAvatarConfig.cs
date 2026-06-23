@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace CombatArena.Game.Configs
 {
-    [CreateAssetMenu(fileName = "PlayerAvatarConfig", menuName = "Scriptable Objects/PlayerAvatarConfig")]
+    [CreateAssetMenu(fileName = "PlayerAvatarConfig", menuName = "Scriptable Objects/Player/Player Avatar Config")]
     public class PlayerAvatarConfig : ScriptableObject
     {
         [field: Header("Movement")]

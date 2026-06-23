@@ -17,7 +17,8 @@ MonoBehaviour:
   <Description>k__BackingField: Break ground beneath you.
   <Icon>k__BackingField: {fileID: 21300000, guid: b426e1b3d8b81884994b736634c54045, type: 3}
   <Cooldown>k__BackingField: 20
-  <AttackType>k__BackingField: 0
+  <AttackType>k__BackingField: 1
   <Damage>k__BackingField: 100
   <Range>k__BackingField: 3
   <CriticalChance>k__BackingField: 0.25
+  <ArmorBreakChance>k__BackingField: 0.15

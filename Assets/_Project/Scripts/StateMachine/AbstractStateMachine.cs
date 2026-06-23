@@ -1,9 +1,8 @@
-using System;
 using System.Collections.Generic;
 
 namespace StateMachine
 {
-    public abstract class AbstractStateMachine : IStateMachine, IDisposable
+    public abstract class AbstractStateMachine : IStateMachine, System.IDisposable
     {
         protected Dictionary<System.Type, IState> _states;
 

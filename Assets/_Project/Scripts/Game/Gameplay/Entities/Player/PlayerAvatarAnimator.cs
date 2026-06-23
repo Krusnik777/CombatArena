@@ -12,9 +12,23 @@ namespace CombatArena.Game.Gameplay.Entities.Player
         [SerializeField] private CharacterController m_characterController;
         [SerializeField] private Animator m_animator;
 
+        private PlayerAvatarMovement _movement;
+
+        public void Bind(PlayerAvatarMovement movement)
+        {
+            _movement = movement;
+        }
+
         private void Update()
         {
-            m_animator.SetBool(_isMoving, m_characterController.velocity.magnitude >= _MovementThreshold);
+            if (_movement != null)
+            {
+                m_animator.SetBool(_isMoving, _movement.DirectionControl.magnitude >= _MovementThreshold);
+            }
+            else
+            {
+                m_animator.SetBool(_isMoving, m_characterController.velocity.magnitude >= _MovementThreshold);
+            }
         }
 
         public void PlaySimpleAttack()

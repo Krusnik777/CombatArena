@@ -15,12 +15,16 @@ namespace CombatArena.Game.Gameplay.Entities.Player
         private PlayerAvatarConfig _config;
 
         private Vector3 _directionControl;
+        public Vector3 DirectionControl => _directionControl;
+
+        private bool _isActive = true;
 
         public void Bind(PlayerAvatarConfig config, GameInputService gameInputService)
         {
             _config = config;
             _gameInputService = gameInputService;
         }
+        public void SetActive(bool state) => _isActive = state;
         public void Stop() => m_characterController.Move(Vector3.zero);
 
         public void Teleport(Transform targetPlace)
@@ -40,7 +44,7 @@ namespace CombatArena.Game.Gameplay.Entities.Player
 
             GetMoveDirection();
 
-            if (_directionControl.magnitude > 0)
+            if (_directionControl.magnitude > 0 && _isActive)
             {
                 m_characterController.Move(_directionControl * _config.MovementSpeed * Time.deltaTime);
                 var targetRotation = Quaternion.LookRotation(_directionControl);
@@ -66,16 +70,16 @@ namespace CombatArena.Game.Gameplay.Entities.Player
 
         private bool _isDashing = false;
 
-        public void PerformDash(DashAbilityConfig config)
+        public void PerformDash(DashAbilityConfig config, System.Action onEnd)
         {
             if (_isDashing || _config == null) return;
 
             var targetDirection = _directionControl.magnitude < 0.1f ? m_viewTransform.forward.normalized : _directionControl;
 
-            StartCoroutine(DashCoroutine(config, targetDirection));
+            StartCoroutine(DashCoroutine(config, targetDirection, onEnd));
         }
 
-        private IEnumerator DashCoroutine(DashAbilityConfig config, Vector3 dir)
+        private IEnumerator DashCoroutine(DashAbilityConfig config, Vector3 dir, System.Action onEnd)
         {
             _isDashing = true;
 
@@ -88,6 +92,7 @@ namespace CombatArena.Game.Gameplay.Entities.Player
             }
 
             _isDashing = false;
+            onEnd?.Invoke();
         }
 
         #endregion

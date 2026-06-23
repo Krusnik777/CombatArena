@@ -7,8 +7,12 @@ namespace CombatArena.Game.Gameplay
 {
     public abstract class Ability : IAbility, IDisposable
     {
+        public readonly Subject<Ability> OnUsed = new();
+        public readonly Subject<Ability> OnExecuted = new();
+        public readonly Subject<Ability> OnCooldownCompleted = new();
+
         public abstract AbilityConfig Config { get; }
-        public abstract void Use();
+        public abstract bool TryUse();
 
         public float CurrentCooldownRate => _currentTime/Config.Cooldown;
 
@@ -24,6 +28,14 @@ namespace CombatArena.Game.Gameplay
 
         public virtual bool IsReady() => CurrentCooldownRate >= 1f && _isReadyToUse;
         protected virtual void SetIsReadyToUse(bool state) => _isReadyToUse = state;
+        protected virtual void SetCooldownAsCompleted()
+        {
+            _cooldownListenerDisposable?.Dispose();
+
+            _currentTime = Config.Cooldown;
+
+            OnCooldownCompleted?.OnNext(this);
+        }
 
         protected void StartCooldown()
         {
@@ -36,8 +48,7 @@ namespace CombatArena.Game.Gameplay
         {
             if (CurrentCooldownRate >= 1f)
             {
-                _cooldownListenerDisposable?.Dispose();
-
+                SetCooldownAsCompleted();
                 return;
             }
 

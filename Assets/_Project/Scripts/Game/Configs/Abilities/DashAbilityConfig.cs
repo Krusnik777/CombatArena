@@ -8,6 +8,8 @@ namespace CombatArena.Game.Configs
         [field: SerializeField] public float DashDistance { get; private set; } = 5f;
         [field: SerializeField] public int DashSteps { get; private set; } = 10;
 
+        public override AbilityType Type => AbilityType.Dash;
+        
         #if UNITY_EDITOR
 
         protected override void OnValidate()

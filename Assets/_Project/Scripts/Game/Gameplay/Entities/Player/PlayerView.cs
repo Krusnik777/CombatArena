@@ -6,5 +6,6 @@ namespace CombatArena.Game.Gameplay.Entities.Player
     {
         [field: SerializeField] public PlayerAvatarMovement Movement { get; private set; }
         [field: SerializeField] public PlayerAvatarAnimator Animator { get; private set; }
+        [field: SerializeField] public AnimatorEventsCollector EventsCollector { get; private set; }
     }
 }

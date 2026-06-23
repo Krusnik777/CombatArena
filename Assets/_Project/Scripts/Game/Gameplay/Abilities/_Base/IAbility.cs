@@ -7,7 +7,7 @@ namespace CombatArena.Game.Gameplay
         public AbilityConfig Config { get; }
         public float CurrentCooldownRate { get; }
 
-        public void Use();
+        public bool TryUse();
         public bool IsReady();
     }
 }
