@@ -7,7 +7,7 @@ namespace CombatArena.Game.Gameplay.Entities.Player
         private const string _isMoving = "IsMoving";
         private const string _simpleAttack = "SimpleAttack";
         private const string _superAttack = "SuperAttack";
-        private const float _MovementThreshold = 0.05f;
+        private const float _movementThreshold = 0.05f;
 
         [SerializeField] private CharacterController m_characterController;
         [SerializeField] private Animator m_animator;
@@ -23,11 +23,11 @@ namespace CombatArena.Game.Gameplay.Entities.Player
         {
             if (_movement != null)
             {
-                m_animator.SetBool(_isMoving, _movement.DirectionControl.magnitude >= _MovementThreshold);
+                m_animator.SetBool(_isMoving, _movement.DirectionControl.magnitude >= _movementThreshold);
             }
             else
             {
-                m_animator.SetBool(_isMoving, m_characterController.velocity.magnitude >= _MovementThreshold);
+                m_animator.SetBool(_isMoving, m_characterController.velocity.magnitude >= _movementThreshold);
             }
         }
 

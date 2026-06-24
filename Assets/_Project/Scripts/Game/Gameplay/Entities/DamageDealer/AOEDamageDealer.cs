@@ -32,7 +32,7 @@ namespace CombatArena.Game.Gameplay.Entities
 
         private void DamageAllInRange()
         {
-            _attackExecutedListenerDisposable?.Dispose();
+            //_attackExecutedListenerDisposable?.Dispose();
 
             var damage = DamageFactory.Create(_attackConfig);
 

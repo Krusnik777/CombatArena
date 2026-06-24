@@ -5,6 +5,7 @@ namespace CombatArena.Game.Configs
     [CreateAssetMenu(fileName = "EnemiesCollection", menuName = "Scriptable Objects/Enemies Collection")]
     public class EnemiesCollection : ScriptableObject
     {
+        [field: SerializeField] public string PrefabsPath { get; private set; } = "Prefabs/Gameplay/Enemies";
         [field: SerializeField] public EnemyConfig[] AllEnemies { get; private set; }
 
         public EnemyConfig GetConfig(string id)

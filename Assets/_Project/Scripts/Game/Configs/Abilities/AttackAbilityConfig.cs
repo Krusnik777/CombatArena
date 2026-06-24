@@ -4,8 +4,8 @@ namespace CombatArena.Game.Configs
 {
     public enum AttackType
     {
-        HorizontalSlash,
-        JumpAttack
+        BasicAttack,
+        AreaAttack
     }
 
     [CreateAssetMenu(fileName = "AttackAbilityConfig", menuName = "Scriptable Objects/Abilities/Attack Ability Config")]

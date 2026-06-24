@@ -16,7 +16,7 @@ MonoBehaviour:
   <Name>k__BackingField: Basic Attack
   <Description>k__BackingField: Simple horizontal sword slash
   <Icon>k__BackingField: {fileID: 21300000, guid: c80b56d3ce52b304ab4410361b927849, type: 3}
-  <Cooldown>k__BackingField: 0.5
+  <Cooldown>k__BackingField: 0
   <AttackType>k__BackingField: 0
   <Damage>k__BackingField: 30
   <Range>k__BackingField: 1.1

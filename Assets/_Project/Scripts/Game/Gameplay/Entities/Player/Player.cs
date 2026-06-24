@@ -19,7 +19,10 @@ namespace CombatArena.Game.Gameplay.Entities.Player
         private IDamageDealer _currentDamageDealer;
 
         private CompositeDisposable _abilitiesInputListenerDisposable;
-        private CompositeDisposable _attackListenerDisposable;
+
+        private IDisposable _damageListenerDisposable;
+        private IDisposable _healthListenerDisposable;
+        private IDisposable _attackFinishListenerDisposable;
 
         public Player(PlayerView view, PlayerConfigsProvider configsProvider, GameInputService gameInputService)
         {
@@ -31,12 +34,19 @@ namespace CombatArena.Game.Gameplay.Entities.Player
             _view.Animator.Bind(_view.Movement);
 
             Health = new Health(new DamageProcessor(), _healthConfig.MaxHealth);
+
+            _healthListenerDisposable = Health.Value.Subscribe(OnHealthChange);
+            _damageListenerDisposable = _view.Damageable.OnHitted.Subscribe(TakeDamage);
         }
 
         public void Dispose()
         {
             _abilitiesInputListenerDisposable?.Dispose();
-            _attackListenerDisposable?.Dispose();
+
+            _damageListenerDisposable?.Dispose();
+            _healthListenerDisposable?.Dispose();
+            _attackFinishListenerDisposable?.Dispose();
+
             Abilities?.Dispose();
             _currentDamageDealer?.Dispose();
         }
@@ -60,34 +70,36 @@ namespace CombatArena.Game.Gameplay.Entities.Player
         {
             var finishedAttack = new Subject<bool>();
 
-            _attackListenerDisposable?.Dispose();
+            _attackFinishListenerDisposable?.Dispose();
             _currentDamageDealer?.Dispose();
-            _attackListenerDisposable = new();
 
             _view.Movement.SetActive(false);
-            _attackListenerDisposable.Add(_view.EventsCollector.OnAttackFinish.Subscribe(_ =>
+            _attackFinishListenerDisposable = _view.EventsCollector.OnAttackFinish.Subscribe(_ =>
             {
-                _attackListenerDisposable?.Dispose();
+                _attackFinishListenerDisposable?.Dispose();
                 _currentDamageDealer?.Dispose();
 
                 _view.Movement.SetActive(true);
+                Health.SetIgnoreDamage(false);
 
                 _currentActiveAbility = null;
                 _currentDamageDealer = null;
 
                 finishedAttack?.OnNext(true);
-            }));
+            });
 
-            if (config.AttackType == AttackType.HorizontalSlash)
+            if (config.AttackType == AttackType.BasicAttack)
             {
                 _currentDamageDealer = new SwordDamageDealer(Root.LayerMasks.Enemy, _view.Movement.LookTransform, config, _view.EventsCollector, _view.SwordTransform);
 
                 _view.Animator.PlaySimpleAttack();
             }
 
-            if (config.AttackType == AttackType.JumpAttack)
+            if (config.AttackType == AttackType.AreaAttack)
             {
                 _currentDamageDealer = new AOEDamageDealer(Root.LayerMasks.Enemy, _view.transform, config, _view.EventsCollector);
+
+                Health.SetIgnoreDamage(true);
 
                 _view.Animator.PlaySuperAttack();
             }
@@ -99,13 +111,13 @@ namespace CombatArena.Game.Gameplay.Entities.Player
         {
             var finishedDash = new Subject<bool>();
 
-            // Enable Invulnerability
+            Health.SetIgnoreDamage(true);
             // Show Dash Effect
             // Play Dash Sound
 
             _view.Movement.PerformDash(config, () =>
             {
-                // Disable Invulnerability
+                Health.SetIgnoreDamage(false);
                 // Stop Dash Effect
 
                 _currentActiveAbility = null;
@@ -135,6 +147,26 @@ namespace CombatArena.Game.Gameplay.Entities.Player
             if (_currentActiveAbility != null) return;
 
             if (Abilities.AbilityY.TryUse()) _currentActiveAbility = Abilities.AbilityY;
+        }
+
+        private void OnHealthChange(int currentValue)
+        {
+            if (currentValue <= 0)
+            {
+                // Disable Movement And All Things 
+                // Death Sound
+                // Death Effect
+                // Death Animation
+                // Dispose Only At Animation End
+            }
+        }
+
+        private void TakeDamage(Damage damage)
+        {
+            bool isBlocked = UnityEngine.Random.value >= 1 - _healthConfig.ArmorDefenceChance;
+            if (isBlocked) damage.Modifiers.Add(new ArmorDefenceModifier(_healthConfig.Armor));
+
+            Health.TakeDamage(damage);
         }
     }
 }

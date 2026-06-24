@@ -197,7 +197,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Horizontal Slash
-  m_Speed: 1.6
+  m_Speed: 2
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -7811105194860555461}
@@ -479,7 +479,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Jump Attack
-  m_Speed: 1
+  m_Speed: 1.25
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 2577804166572429863}

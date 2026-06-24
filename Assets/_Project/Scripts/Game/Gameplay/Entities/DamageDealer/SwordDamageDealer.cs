@@ -55,6 +55,14 @@ namespace CombatArena.Game.Gameplay.Entities
         {
             _attackCheckDisposable?.Dispose();
             _attackExecutedListenerDisposable?.Dispose();
+
+            foreach (var damageable in _hittedDamageables)
+            {
+                var damage = DamageFactory.Create(_attackConfig);
+                damageable.Hit(damage);
+            }
+
+            _hittedDamageables.Clear();
         }
 
         private void TrackEnemies()
@@ -73,9 +81,6 @@ namespace CombatArena.Game.Gameplay.Entities
                 float angle = Vector3.Angle(_transform.forward, directionToDamageable);
 
                 if (angle > _arcAngle) continue;
-
-                var damage = DamageFactory.Create(_attackConfig);
-                damageable.Hit(damage);
 
                 _hittedDamageables.Add(damageable);
             }

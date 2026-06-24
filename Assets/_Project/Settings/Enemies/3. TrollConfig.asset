@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e493aeb66c9bfd64da0e5c0d6b619203, type: 3}
+  m_Name: 3. TrollConfig
+  m_EditorClassIdentifier: Assembly-CSharp::CombatArena.Game.Configs.EnemyConfig
+  <ID>k__BackingField: troll_enemy
+  <PrefabName>k__BackingField: Troll_EnemyView
+  <MaxHealth>k__BackingField: 140
+  <ArmorDefenceChance>k__BackingField: 0.1
+  <Armor>k__BackingField: 10
+  <AttackAbility>k__BackingField: {fileID: 11400000, guid: 1875e92ba6a74764b98c44def89ac6de, type: 2}
+  <MovementSpeed>k__BackingField: 0.5
+  <RotationSpeed>k__BackingField: 250

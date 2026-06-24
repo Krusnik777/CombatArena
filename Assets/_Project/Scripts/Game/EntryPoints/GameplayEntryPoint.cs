@@ -16,7 +16,7 @@ namespace CombatArena.Game.EntryPoints
     {
         [SerializeField] private UISceneRootView m_sceneUIRootPrefab;
         [SerializeField] private PlayerView m_playerView;
-        [SerializeField] private EnemyView[] m_enemyViews;
+        [SerializeField] private Transform[] m_enemyPositions;
 
         private Subject<string> _onEnd;
 
@@ -39,11 +39,16 @@ namespace CombatArena.Game.EntryPoints
             
             SetupUI(sceneContainer);
 
-            var enemyConfigsProvider = sceneContainer.Resolve<EnemyConfigsProvider>();
+            sceneContainer.RegisterFactory(c => new EnemyFactory(c.Resolve<EnemyConfigsProvider>().EnemiesCollection)).AsSingle();
 
-            for (int i = 0; i < m_enemyViews.Length; i++)
+            // test
+
+            var enemyFactory = sceneContainer.Resolve<EnemyFactory>();
+
+            for (int i = 0; i < m_enemyPositions.Length; i++)
             {
-                var enemy = new Enemy(m_enemyViews[i].Config, m_enemyViews[i]);
+                var enemy = enemyFactory.CreateRandomEnemy(m_enemyPositions[i].position);
+                enemy.AssignPursueTarget(m_playerView.transform);
             }
 
             _disposable = gameInputService.OnTestPressed.Subscribe(_ =>

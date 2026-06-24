@@ -12,4 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce6b761a2f1465c448b00be787c903a2, type: 3}
   m_Name: EnemiesCollection
   m_EditorClassIdentifier: Assembly-CSharp::CombatArena.Game.Configs.EnemiesCollection
-  <AllEnemies>k__BackingField: []
+  <PrefabsPath>k__BackingField: Prefabs/Gameplay/Enemies
+  <AllEnemies>k__BackingField:
+  - {fileID: 11400000, guid: a0c05b8b886bf2e478c1cecd30f8a875, type: 2}
+  - {fileID: 11400000, guid: 41e099ed28e1e774d87cfc57831b80d9, type: 2}
+  - {fileID: 11400000, guid: 488476ceb78e61647994d55e48819f86, type: 2}
+  - {fileID: 11400000, guid: c6ff7e189ad3dd8449b41d09dbd5e76e, type: 2}

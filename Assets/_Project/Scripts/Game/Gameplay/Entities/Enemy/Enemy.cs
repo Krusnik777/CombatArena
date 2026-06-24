@@ -13,8 +13,13 @@ namespace CombatArena.Game.Gameplay.Entities.Enemy
         private EnemyConfig _config;
         private EnemyView _view;
 
+        private AttackAbility _attackAbility;
+        private TargetPursuer _currentPursuer;
+        private IDamageDealer _currentDamageDealer;
+
         private IDisposable _damageListenerDisposable;
         private IDisposable _healthListenerDisposable;
+        private IDisposable _attackFinishListenerDisposable;
         
         public Enemy(EnemyConfig config, EnemyView view)
         {
@@ -22,11 +27,69 @@ namespace CombatArena.Game.Gameplay.Entities.Enemy
             _view = view;
 
             Health = new(new DamageProcessor(), _config.MaxHealth);
+            _attackAbility = new AttackAbility(config.AttackAbility, this);
 
             _view.UIHealth.Bind(Health);
 
             _healthListenerDisposable = Health.Value.Subscribe(OnHealthChange);
             _damageListenerDisposable = _view.Damageable.OnHitted.Subscribe(TakeDamage);
+        }
+
+        public void Dispose()
+        {
+            _view.UIHealth?.Dispose();
+
+            _damageListenerDisposable?.Dispose();
+            _healthListenerDisposable?.Dispose();
+            _attackFinishListenerDisposable?.Dispose();
+
+            _attackAbility?.Dispose();
+            _currentPursuer?.Dispose();
+            _currentDamageDealer?.Dispose();
+
+            GameObject.Destroy(_view.gameObject);
+        }
+
+        public void AssignPursueTarget(Transform target)
+        {
+            _currentPursuer?.Dispose();
+
+            _currentPursuer = new(target, _view.Agent, _config.MovementSpeed, _config.AttackAbility.Range);
+            _currentPursuer.SetActionOnReach(TryToAttack);
+
+            _currentPursuer.StartPursue();
+        }
+
+        public Observable<bool> Attack(AttackAbilityConfig config)
+        {
+            var finishedAttack = new Subject<bool>();
+
+            _attackFinishListenerDisposable?.Dispose();
+            _currentDamageDealer?.Dispose();
+
+            _currentPursuer?.StopPursue();
+
+            _attackFinishListenerDisposable = _view.EventsCollector.OnAttackFinish.Subscribe(_ =>
+            {
+                _attackFinishListenerDisposable?.Dispose();
+                _currentDamageDealer?.Dispose();
+
+                _currentPursuer?.StartPursue();
+
+                _currentDamageDealer = null;
+
+                finishedAttack?.OnNext(true);
+            });
+
+            _currentDamageDealer = new AOEDamageDealer(Root.LayerMasks.Player, _view.transform, config, _view.EventsCollector);
+            _view.Animator.PlayAttack();
+
+            return finishedAttack;
+        }
+
+        private void TryToAttack()
+        {
+            _attackAbility?.TryUse();
         }
 
         private void OnHealthChange(int currentValue)
@@ -37,23 +100,10 @@ namespace CombatArena.Game.Gameplay.Entities.Enemy
                 // Death Sound
                 // Death Effect
                 // Death Animation
-                // Dispose At Animation End
+                // Dispose Only At Animation End
 
                 Dispose();
             }
-        }
-
-        public void Dispose()
-        {
-            _view.UIHealth?.Dispose();
-            _damageListenerDisposable?.Dispose();
-            _healthListenerDisposable?.Dispose();
-            GameObject.Destroy(_view.gameObject);
-        }
-
-        public Observable<bool> Attack(AttackAbilityConfig config)
-        {
-            throw new NotImplementedException();
         }
 
         private void TakeDamage(Damage damage)

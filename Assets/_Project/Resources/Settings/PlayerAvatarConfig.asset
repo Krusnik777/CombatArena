@@ -16,5 +16,3 @@ MonoBehaviour:
   <RotationSpeed>k__BackingField: 250
   <IsMovementIsometric>k__BackingField: 1
   <IsInputReverseMovement>k__BackingField: 0
-  <DashDistance>k__BackingField: 5
-  <DashSteps>k__BackingField: 10

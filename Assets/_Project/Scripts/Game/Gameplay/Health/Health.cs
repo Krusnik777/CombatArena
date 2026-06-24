@@ -22,6 +22,8 @@ namespace CombatArena.Game.Gameplay.HealthSystem
         public Observable<int> Value => _currentValue;
         public Subject<HealthChange> OnChange { get; }
 
+        private bool _ignoreDamage;
+
         private IDamageProcessor _damageProcessor;
 
         private ReactiveProperty<int> _currentValue;
@@ -36,9 +38,13 @@ namespace CombatArena.Game.Gameplay.HealthSystem
             OnChange = new();
         }
 
+        public void SetIgnoreDamage(bool state) => _ignoreDamage = state;
+
         public void TakeDamage(Damage damage)
         {
             if (_currentValue.Value <= 0) return;
+
+            if (_ignoreDamage) return;
 
             _damageProcessor.Process(ref damage);
 

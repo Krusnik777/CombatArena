@@ -14,7 +14,7 @@ namespace CombatArena.Game.Gameplay
         public abstract AbilityConfig Config { get; }
         public abstract bool TryUse();
 
-        public float CurrentCooldownRate => _currentTime/Config.Cooldown;
+        public float CurrentCooldownRate => Config.Cooldown == 0f ? 1f : _currentTime/Config.Cooldown;
 
         private bool _isReadyToUse;
         private float _currentTime;
