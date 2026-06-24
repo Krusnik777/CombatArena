@@ -50,8 +50,7 @@ namespace CombatArena.Game.Root
 
             if (sceneName == Scenes.GAMEPLAY)
             {
-                //var enterParams = new GameplayEnterParams(0);
-                _coroutines.StartCoroutine(LoadAndStartGameplay(/*enterParams*/));
+                StartGameplay(new GameplayEnterParameters(0));
 
                 return;
             }
@@ -63,10 +62,14 @@ namespace CombatArena.Game.Root
             
             #endif
 
-            _coroutines.StartCoroutine(LoadAndStartGameplay());
+            StartGameplay(new GameplayEnterParameters(0));
         }
 
-        private IEnumerator LoadAndStartGameplay(/*GameplayEnterParams enterParams*/)
+        private void StartGameplay(GameplayEnterParameters enterParams) => _coroutines.StartCoroutine(LoadAndStartGameplay(enterParams));
+
+        #region Routines
+
+        private IEnumerator LoadAndStartGameplay(GameplayEnterParameters enterParams)
         {
             _uiRoot.ShowLoadingScreen();
             _cachedSceneContainer?.Dispose();
@@ -76,22 +79,41 @@ namespace CombatArena.Game.Root
 
             yield return new WaitForSeconds(1);
 
-            var sceneEntryPoint = Object.FindFirstObjectByType<EntryPoint>();
+            var sceneEntryPoint = Object.FindFirstObjectByType<EntryPoint<GameplayEnterParameters,GameplayExitParameters>>();
             var sceneContainer = _cachedSceneContainer = new DIContainer(_rootContainer);
-            sceneEntryPoint.Run(sceneContainer).Subscribe(exitTag =>
+            sceneEntryPoint.Run(sceneContainer, enterParams).Subscribe(exitParameters =>
             {
-                if (exitTag == "FINISH")
+                if (exitParameters.ExitTag == GameplayExitTags.RESTART)
                 {
+                    StartGameplay(new GameplayEnterParameters(exitParameters.Runs));
+
+                    return;
+                }
+
+                if (exitParameters.ExitTag == GameplayExitTags.NEXT)
+                {
+                    StartGameplay(new GameplayEnterParameters(exitParameters.Runs));
+
+                    return;
+                }
+
+                if (exitParameters.ExitTag == GameplayExitTags.EXIT)
+                {
+
                     #if UNITY_EDITOR
 
-                    LoadAndStartGameplay();
+                    StartGameplay(new GameplayEnterParameters(0));
 
                     #else
 
                     Application.Quit();
                     
                     #endif
+
+                    return;
                 }
+
+                throw new System.NotImplementedException("[Gameplay Exit Parameters] Current exit parameters currently not supported");
             });
 
             _uiRoot.HideLoadingScreen();
@@ -101,6 +123,8 @@ namespace CombatArena.Game.Root
         {
             yield return SceneManager.LoadSceneAsync(sceneName);
         }
+
+        #endregion
 
         #region Services Setup Methods
 

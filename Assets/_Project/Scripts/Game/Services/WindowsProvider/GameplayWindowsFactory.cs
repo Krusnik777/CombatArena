@@ -8,7 +8,10 @@ namespace CombatArena.Game.Services
 {
     public class GameplayWindowsFactory : IWindowsFactory
     {
+        private string _beforeBattleScreenViewName = "BeforeBattleScreenView";
         private string _battleScreenViewName = "BattleScreenView";
+        private string _victoryScreenViewName = "VictoryScreenView";
+        private string _defeatScreenViewName = "DefeatScreenView";
 
         private Transform _screensHolder;
         private Transform _popupsHolder;
@@ -23,12 +26,36 @@ namespace CombatArena.Game.Services
         {
             Type t = typeof(T);
 
+            if (t == typeof(BeforeBattleScreen))
+            {
+                var prefabPath = GetPrefabPath(_beforeBattleScreenViewName);
+                var view = InstantiateWindowViewForScreen<BeforeBattleScreenView>(prefabPath);
+
+                return new BeforeBattleScreen(view) as T;
+            }
+
             if (t == typeof(BattleScreen))
             {
                 var prefabPath = GetPrefabPath(_battleScreenViewName);
                 var view = InstantiateWindowViewForScreen<BattleScreenView>(prefabPath);
 
                 return new BattleScreen(view) as T;
+            }
+
+            if (t == typeof(VictoryScreen))
+            {
+                var prefabPath = GetPrefabPath(_victoryScreenViewName);
+                var view = InstantiateWindowViewForScreen<VictoryScreenView>(prefabPath);
+
+                return new VictoryScreen(view) as T;
+            }
+
+            if (t == typeof(DefeatScreen))
+            {
+                var prefabPath = GetPrefabPath(_defeatScreenViewName);
+                var view = InstantiateWindowViewForScreen<DefeatScreenView>(prefabPath);
+
+                return new DefeatScreen(view) as T;
             }
 
             throw new ArgumentNullException($"Unsupported class - type of: {t}");

@@ -18,5 +18,5 @@ MonoBehaviour:
   <ArmorDefenceChance>k__BackingField: 0.01
   <Armor>k__BackingField: 2
   <AttackAbility>k__BackingField: {fileID: 11400000, guid: 7d4c435eeab06954390607de32e37c02, type: 2}
-  <MovementSpeed>k__BackingField: 1
+  <MovementSpeed>k__BackingField: 1.25
   <RotationSpeed>k__BackingField: 250

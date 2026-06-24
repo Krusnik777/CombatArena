@@ -12,8 +12,6 @@ namespace CombatArena.Game.Services
         public Subject<Unit> OnAbilityXPressed { get; private set; } = new();
         public Subject<Unit> OnAbilityYPressed { get; private set; } = new();
 
-        public Subject<Unit> OnTestPressed { get; private set; } = new();
-
         private GameInput _gameInput;
         public InputActionAsset ActionsAsset => _gameInput.asset;
 
@@ -32,8 +30,6 @@ namespace CombatArena.Game.Services
             _gameInput.Player.AbilityA.performed += OnAbilityA;
             _gameInput.Player.AbilityX.performed += OnAbilityX;
             _gameInput.Player.AbilityY.performed += OnAbilityY;
-
-            _gameInput.Player.Test.performed += OnTest;
         }
 
         public void Dispose()
@@ -44,8 +40,6 @@ namespace CombatArena.Game.Services
             _gameInput.Player.AbilityA.performed -= OnAbilityA;
             _gameInput.Player.AbilityX.performed -= OnAbilityX;
             _gameInput.Player.AbilityY.performed -= OnAbilityY;
-
-            _gameInput.Player.Test.performed -= OnTest;
         }
 
         public Vector3 GetMovementInput(bool isInverse = true)
@@ -83,11 +77,6 @@ namespace CombatArena.Game.Services
         private void OnAbilityY(InputAction.CallbackContext context)
         {
             OnAbilityYPressed?.OnNext(Unit.Default);
-        }
-
-        private void OnTest(InputAction.CallbackContext context)
-        {
-            OnTestPressed?.OnNext(Unit.Default);
         }
     }
 }

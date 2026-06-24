@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace CombatArena.Game.EntryPoints
 {
-    public abstract class EntryPoint : MonoBehaviour
+    public abstract class EntryPoint<TEnterParams,TExitParams> : MonoBehaviour where TEnterParams : SceneEnterParameters where TExitParams : SceneExitParameters
     {
-        public abstract Observable<string> Run(DIContainer sceneContainer);
+        public abstract Observable<TExitParams> Run(DIContainer sceneContainer, TEnterParams enterParameters);
     }
 }

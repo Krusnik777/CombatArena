@@ -9,6 +9,8 @@ namespace UI.Windows
 
         protected readonly IWindowView _view;
 
+        protected bool _isShowing { get; private set; }
+
         private readonly Subject<Window> _onClose = new();
 
         public Window(IWindowView view)
@@ -19,11 +21,15 @@ namespace UI.Windows
         public virtual void Show()
         {
             _view.Show();
+
+            _isShowing = true;
         }
 
         public virtual void Hide()
         {
             _view.Hide();
+
+            _isShowing = false;
 
             _onClose?.OnNext(this);
         }

@@ -2,7 +2,7 @@ using CombatArena.Game.Gameplay.UI;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace CombatArena.Game.Gameplay.Entities.Enemy
+namespace CombatArena.Game.Gameplay.Entities.Enemies
 {
     public class EnemyView : MonoBehaviour
     {

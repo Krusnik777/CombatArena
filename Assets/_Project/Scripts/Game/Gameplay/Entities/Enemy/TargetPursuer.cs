@@ -3,7 +3,7 @@ using R3;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace CombatArena.Game.Gameplay.Entities.Enemy
+namespace CombatArena.Game.Gameplay.Entities.Enemies
 {
     public class TargetPursuer : IDisposable
     {
@@ -46,7 +46,7 @@ namespace CombatArena.Game.Gameplay.Entities.Enemy
             _pursueUpdateDisposable?.Dispose();
 
             _agent.speed = 0;
-            _agent.destination = _agent.transform.position;
+            if (_agent.enabled) _agent.destination = Vector3.zero;
         }
 
         private void UpdatePursue()

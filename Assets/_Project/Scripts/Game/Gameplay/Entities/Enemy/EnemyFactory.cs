@@ -1,7 +1,7 @@
 using CombatArena.Game.Configs;
 using UnityEngine;
 
-namespace CombatArena.Game.Gameplay.Entities.Enemy
+namespace CombatArena.Game.Gameplay.Entities.Enemies
 {
     public class EnemyFactory
     {
@@ -29,7 +29,7 @@ namespace CombatArena.Game.Gameplay.Entities.Enemy
             return CreateEnemy(enemyConfig, position);
         }
 
-        public Enemy CreateEnemy(EnemyConfig enemyConfig, Vector3 position)
+        private Enemy CreateEnemy(EnemyConfig enemyConfig, Vector3 position)
         {
             var enemyPrefabPath = _enemiesCollection.PrefabsPath + "/" + enemyConfig.PrefabName;
             var enemyViewPrefab = Resources.Load<EnemyView>(enemyPrefabPath);

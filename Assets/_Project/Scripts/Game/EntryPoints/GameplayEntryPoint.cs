@@ -5,66 +5,33 @@ using UI;
 using R3;
 using UnityEngine;
 using CombatArena.Game.Gameplay.Entities.Player;
-using CombatArena.Game.Gameplay;
-using CombatArena.Game.Gameplay.UI;
-using CombatArena.Game.Gameplay.Entities.Enemy;
-
+using CombatArena.Game.Gameplay.Entities.Enemies;
+using CombatArena.Game.StateMachines;
+using CombatArena.Game.Gameplay.Entities.Levels;
 
 namespace CombatArena.Game.EntryPoints
 {
-    public class GameplayEntryPoint : EntryPoint
+    public class GameplayEntryPoint : EntryPoint<GameplayEnterParameters,GameplayExitParameters>
     {
         [SerializeField] private UISceneRootView m_sceneUIRootPrefab;
+        [SerializeField] private GameplayLevelView m_levelView;
         [SerializeField] private PlayerView m_playerView;
-        [SerializeField] private Transform[] m_enemyPositions;
 
-        private Subject<string> _onEnd;
+        private GameplayStateMachine _stateMachine;
 
-        private System.IDisposable _disposable;
+        private Subject<GameplayExitParameters> _onEnd;
 
-        public override Observable<string> Run(DIContainer sceneContainer)
+        public override Observable<GameplayExitParameters> Run(DIContainer sceneContainer, GameplayEnterParameters enterParameters)
         {
             Debug.Log("ENTRY POINT: Started Gameplay");
 
             _onEnd = new();
+            RegisterLocalInstances(sceneContainer, enterParameters);
 
-            var abilitiesProvider = sceneContainer.Resolve<AbilityConfigsProvider>();
-            var gameInputService = sceneContainer.Resolve<GameInputService>();
-            var player = new Player(m_playerView, sceneContainer.Resolve<PlayerConfigsProvider>(), gameInputService);
-            sceneContainer.RegisterInstance(player);
-            
-            var playerAbilitiesFactory = new PlayerAbilitiesFactory(abilitiesProvider.AbilitiesCollection);
-            var playerAbilities = playerAbilitiesFactory.Create(player);
-            player.AssignAbilities(playerAbilities);
-            
             SetupUI(sceneContainer);
 
-            sceneContainer.RegisterFactory(c => new EnemyFactory(c.Resolve<EnemyConfigsProvider>().EnemiesCollection)).AsSingle();
-
-            // test
-
-            var enemyFactory = sceneContainer.Resolve<EnemyFactory>();
-
-            for (int i = 0; i < m_enemyPositions.Length; i++)
-            {
-                var enemy = enemyFactory.CreateRandomEnemy(m_enemyPositions[i].position);
-                enemy.AssignPursueTarget(m_playerView.transform);
-            }
-
-            _disposable = gameInputService.OnTestPressed.Subscribe(_ =>
-            {
-                /*int value = Random.Range(1, 50);
-                int type = Random.Range(0, 2);
-
-                if (type == 0) player.Health.TakeDamage(new Damage()
-                {
-                    BaseValue = value,
-                    ResultValue = value,
-                    Modifiers = new()
-                });
-
-                if (type == 1) player.Health.Heal(value);*/
-            });
+            _stateMachine = new GameplayStateMachine(sceneContainer);
+            _stateMachine.SetState<BeforeBattleState>();
 
             return _onEnd;
         }
@@ -74,17 +41,35 @@ namespace CombatArena.Game.EntryPoints
             DisposeOfListeners();
         }
 
-        private void FinishGame()
+        private void Exit(GameplayExitParameters exitParameters)
         {
             DisposeOfListeners();
 
-            _onEnd.OnNext("FINISH");
+            _onEnd.OnNext(exitParameters);
         }
 
         private void DisposeOfListeners()
         {
-            _disposable?.Dispose();
-            //_stateMachine?.Dispose();
+            _stateMachine?.Dispose();
+        }
+
+        private void RegisterLocalInstances(DIContainer sceneContainer, GameplayEnterParameters enterParameters)
+        {
+            var restartInvoker = new EventInvoker(() => Exit(new(GameplayExitTags.RESTART, enterParameters.Runs)));
+            var nextInvoker = new EventInvoker(() => Exit(new(GameplayExitTags.NEXT, enterParameters.Runs + 1)));
+            var exitInvoker = new EventInvoker(() => Exit(new(GameplayExitTags.EXIT, enterParameters.Runs)));
+
+            sceneContainer.RegisterInstance(GameplayExitTags.RESTART, restartInvoker as IEventInvoker);
+            sceneContainer.RegisterInstance(GameplayExitTags.NEXT, nextInvoker as IEventInvoker);
+            sceneContainer.RegisterInstance(GameplayExitTags.EXIT, exitInvoker as IEventInvoker);
+
+            var levelController = new GameplayLevelController(m_levelView, enterParameters.Runs);
+            sceneContainer.RegisterInstance(levelController);
+
+            var player = new Player(m_playerView, sceneContainer.Resolve<PlayerConfigsProvider>(), sceneContainer.Resolve<GameInputService>());
+            sceneContainer.RegisterInstance(player);
+
+            sceneContainer.RegisterFactory(c => new EnemyFactory(c.Resolve<EnemyConfigsProvider>().EnemiesCollection)).AsSingle();
         }
 
         private void SetupUI(DIContainer sceneContainer)
@@ -96,9 +81,6 @@ namespace CombatArena.Game.EntryPoints
             var windowsFactory = new GameplayWindowsFactory(uiSceneRoot.ScreensTransform, uiSceneRoot.PopupsTransform);
             sceneContainer.RegisterInstance(new UIWindowsProvider(windowsFactory));
             //sceneContainer.RegisterFactory(_ => new UIWindowsProvider(windowsFactory)).AsSingle();
-
-            var screen = sceneContainer.Resolve<UIWindowsProvider>().ShowScreen<BattleScreen>();
-            screen.Initialize(sceneContainer.Resolve<Player>());
         }
     }
 }

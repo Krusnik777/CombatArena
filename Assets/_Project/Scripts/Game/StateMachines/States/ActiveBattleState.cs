@@ -1,0 +1,67 @@
+using CombatArena.Game.Gameplay;
+using CombatArena.Game.Gameplay.Entities.Enemies;
+using CombatArena.Game.Gameplay.Entities.Levels;
+using CombatArena.Game.Gameplay.Entities.Player;
+using CombatArena.Game.Gameplay.UI;
+using CombatArena.Game.Services;
+using DI;
+using R3;
+using StateMachine;
+
+namespace CombatArena.Game.StateMachines
+{
+    public class ActiveBattleState : IEnterableState
+    {
+        private IStateMachine _stateMachine;
+        private DIContainer _sceneContainer;
+
+        private System.IDisposable _enemiesDeathsListenerDisposable;
+        private System.IDisposable _playerDeathListenerDisposable;
+
+        public ActiveBattleState(IStateMachine stateMachine, DIContainer sceneContainer)
+        {
+            _stateMachine = stateMachine;
+            _sceneContainer = sceneContainer;
+        }
+
+        public void Enter()
+        {
+            var player = _sceneContainer.Resolve<Player>();
+            var abilitiesProvider = _sceneContainer.Resolve<AbilityConfigsProvider>();
+            var playerAbilitiesFactory = new PlayerAbilitiesFactory(abilitiesProvider.AbilitiesCollection);
+            var playerAbilities = playerAbilitiesFactory.Create(player);
+            player.AssignAbilities(playerAbilities);
+
+            var levelController = _sceneContainer.Resolve<GameplayLevelController>();
+            levelController.SetEnterGateEnabled(true);
+            levelController.StartSpawners(_sceneContainer.Resolve<EnemyFactory>(), player.Transform);
+
+            // LATER: Play battle music
+
+            var screen = _sceneContainer.Resolve<UIWindowsProvider>().ShowScreen<BattleScreen>();
+            screen.Initialize(player, levelController);
+
+            _enemiesDeathsListenerDisposable = levelController.OnEnemyDied.Where(enemiesRemained => enemiesRemained <= 0).Subscribe(_ =>
+            {
+                _enemiesDeathsListenerDisposable?.Dispose();
+                _playerDeathListenerDisposable?.Dispose();
+
+                _stateMachine.SetState<BattleResultState, bool>(true);
+            });
+
+            _playerDeathListenerDisposable = player.OnDeath.Subscribe(_ =>
+            {
+                _enemiesDeathsListenerDisposable?.Dispose();
+                _playerDeathListenerDisposable?.Dispose();
+
+                _stateMachine.SetState<BattleResultState, bool>(false);
+            });
+        }
+
+        public void Exit()
+        {
+            _enemiesDeathsListenerDisposable?.Dispose();
+            _playerDeathListenerDisposable?.Dispose();
+        }
+    }
+}

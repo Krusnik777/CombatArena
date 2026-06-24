@@ -1,25 +1,31 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace CombatArena.Game.Gameplay.Entities.Enemy
+namespace CombatArena.Game.Gameplay.Entities.Enemies
 {
     public class EnemyAnimator : MonoBehaviour
     {
-        private const string _isMoving = "IsMoving";
-        private const string _isAttackTrigger = "Attack";
-        private const float _movementThreshold = 0.05f;
-
         [SerializeField] private Animator m_animator;
         [SerializeField] private NavMeshAgent m_agent;
 
+        private const string _isMovingBool = "IsMoving";
+        private const string _attackTrigger = "Attack";
+        private const string _deathTrigger = "Die";
+        private const float _movementThreshold = 0.05f;
+
         public void PlayAttack()
         {
-            m_animator.SetTrigger(_isAttackTrigger);
+            m_animator.SetTrigger(_attackTrigger);
+        }
+
+        public void PlayDeath()
+        {
+            m_animator.SetTrigger(_deathTrigger);
         }
 
         private void Update()
         {
-            m_animator.SetBool(_isMoving, m_agent.velocity.magnitude >= _movementThreshold);
+            m_animator.SetBool(_isMovingBool, m_agent.velocity.magnitude >= _movementThreshold);
         }
     }
 }

@@ -128,8 +128,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 66465780}
+  - component: {fileID: 66465781}
   m_Layer: 0
-  m_Name: Pos 1 (4)
+  m_Name: SpawnerView 5
   m_TagString: Untagged
   m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -144,12 +145,28 @@ Transform:
   m_GameObject: {fileID: 66465779}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.13, y: 0, z: 21.15}
+  m_LocalPosition: {x: -14.6, y: 0, z: 19.17}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1127001602}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &66465781
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 66465779}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed01bc4cd8861d349a085ddd7c328a90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CombatArena.Game.Gameplay.Entities.Enemy.EnemySpawnerView
+  <SpawnPoint>k__BackingField: {fileID: 66465780}
+  <SpawnAtStart>k__BackingField: 0
+  <SecondsUntilNextSpawn>k__BackingField: 50
+  <AvailableCheckRange>k__BackingField: 5
 --- !u!1 &81639765
 GameObject:
   m_ObjectHideFlags: 0
@@ -235,6 +252,38 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &200838848
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 200838849}
+  m_Layer: 0
+  m_Name: Extra
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &200838849
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 200838848}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 619602834}
+  m_Father: {fileID: 1919105895}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &234185799
 GameObject:
   m_ObjectHideFlags: 0
@@ -244,8 +293,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 234185800}
+  - component: {fileID: 234185801}
   m_Layer: 0
-  m_Name: Pos 1 (3)
+  m_Name: SpawnerView 4
   m_TagString: Untagged
   m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -260,12 +310,28 @@ Transform:
   m_GameObject: {fileID: 234185799}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.75, y: 0, z: 23.31}
+  m_LocalPosition: {x: -9.44, y: 0, z: 33.47}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1127001602}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &234185801
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 234185799}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed01bc4cd8861d349a085ddd7c328a90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CombatArena.Game.Gameplay.Entities.Enemy.EnemySpawnerView
+  <SpawnPoint>k__BackingField: {fileID: 234185800}
+  <SpawnAtStart>k__BackingField: 0
+  <SecondsUntilNextSpawn>k__BackingField: 25
+  <AvailableCheckRange>k__BackingField: 5
 --- !u!1 &363949012
 GameObject:
   m_ObjectHideFlags: 0
@@ -275,8 +341,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 363949013}
+  - component: {fileID: 363949014}
   m_Layer: 0
-  m_Name: Pos 1 (8)
+  m_Name: SpawnerView 9
   m_TagString: Untagged
   m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -291,12 +358,28 @@ Transform:
   m_GameObject: {fileID: 363949012}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.63, y: 0, z: 12.11}
+  m_LocalPosition: {x: 7.81, y: 0, z: 33.58}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1127001602}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &363949014
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 363949012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed01bc4cd8861d349a085ddd7c328a90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CombatArena.Game.Gameplay.Entities.Enemy.EnemySpawnerView
+  <SpawnPoint>k__BackingField: {fileID: 363949013}
+  <SpawnAtStart>k__BackingField: 0
+  <SecondsUntilNextSpawn>k__BackingField: 100
+  <AvailableCheckRange>k__BackingField: 5
 --- !u!1 &387990056
 GameObject:
   m_ObjectHideFlags: 0
@@ -457,7 +540,7 @@ Transform:
   m_GameObject: {fileID: 405137935}
   serializedVersion: 2
   m_LocalRotation: {x: 0.39044836, y: 0.346829, z: -0.16172901, w: 0.83731925}
-  m_LocalPosition: {x: -1.5, y: 5, z: -1.5}
+  m_LocalPosition: {x: -1.14, y: 5, z: -10.39}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -571,6 +654,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6344746033268854615, guid: a4fbc6dd771cfca41b78c81d3fa9c740, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1449763507}
+    - targetCorrespondingSourceObject: {fileID: 6344746033268854615, guid: a4fbc6dd771cfca41b78c81d3fa9c740, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 200838849}
     - targetCorrespondingSourceObject: {fileID: 5565539986065050267, guid: a4fbc6dd771cfca41b78c81d3fa9c740, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1549544661}
@@ -594,8 +680,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 487004237}
+  - component: {fileID: 487004238}
   m_Layer: 0
-  m_Name: Pos 1 (5)
+  m_Name: SpawnerView 6
   m_TagString: Untagged
   m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -610,11 +697,93 @@ Transform:
   m_GameObject: {fileID: 487004236}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.78, y: 0, z: 16.39}
+  m_LocalPosition: {x: 18.03, y: 0, z: 23.38}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1127001602}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &487004238
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 487004236}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed01bc4cd8861d349a085ddd7c328a90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CombatArena.Game.Gameplay.Entities.Enemy.EnemySpawnerView
+  <SpawnPoint>k__BackingField: {fileID: 487004237}
+  <SpawnAtStart>k__BackingField: 0
+  <SecondsUntilNextSpawn>k__BackingField: 60
+  <AvailableCheckRange>k__BackingField: 5
+--- !u!1 &514963588
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 514963591}
+  - component: {fileID: 514963590}
+  - component: {fileID: 514963589}
+  m_Layer: 0
+  m_Name: EnterTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &514963589
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 514963588}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ba702057bf05ad4790ea7ca2df3df9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CombatArena.Game.Gameplay.EnterTrigger
+--- !u!65 &514963590
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 514963588}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &514963591
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 514963588}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.08514, y: 1.5, z: -0.74}
+  m_LocalScale: {x: 20, y: 3, z: 3}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &549357485
 GameObject:
@@ -648,6 +817,77 @@ Transform:
   - {fileID: 1703452640}
   m_Father: {fileID: 1921825514}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &619602833
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 200838849}
+    m_Modifications:
+    - target: {fileID: 5539356657749761588, guid: de072453d6abd9945b9827c2c3b809b5, type: 3}
+      propertyPath: m_Name
+      value: Wall Parent 004
+      objectReference: {fileID: 0}
+    - target: {fileID: 5539356657749761588, guid: de072453d6abd9945b9827c2c3b809b5, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6534347502814029905, guid: de072453d6abd9945b9827c2c3b809b5, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -3.85
+      objectReference: {fileID: 0}
+    - target: {fileID: 6534347502814029905, guid: de072453d6abd9945b9827c2c3b809b5, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.08
+      objectReference: {fileID: 0}
+    - target: {fileID: 6534347502814029905, guid: de072453d6abd9945b9827c2c3b809b5, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 11.95
+      objectReference: {fileID: 0}
+    - target: {fileID: 6534347502814029905, guid: de072453d6abd9945b9827c2c3b809b5, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6534347502814029905, guid: de072453d6abd9945b9827c2c3b809b5, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6534347502814029905, guid: de072453d6abd9945b9827c2c3b809b5, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6534347502814029905, guid: de072453d6abd9945b9827c2c3b809b5, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6534347502814029905, guid: de072453d6abd9945b9827c2c3b809b5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6534347502814029905, guid: de072453d6abd9945b9827c2c3b809b5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6534347502814029905, guid: de072453d6abd9945b9827c2c3b809b5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: de072453d6abd9945b9827c2c3b809b5, type: 3}
+--- !u!4 &619602834 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6534347502814029905, guid: de072453d6abd9945b9827c2c3b809b5, type: 3}
+  m_PrefabInstance: {fileID: 619602833}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &619602835 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5539356657749761588, guid: de072453d6abd9945b9827c2c3b809b5, type: 3}
+  m_PrefabInstance: {fileID: 619602833}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &775137762
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1055,6 +1295,7 @@ GameObject:
   m_Component:
   - component: {fileID: 825038644}
   - component: {fileID: 825038643}
+  - component: {fileID: 825038645}
   m_Layer: 0
   m_Name: EntryPoint
   m_TagString: Untagged
@@ -1075,17 +1316,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CombatArena.Game.EntryPoints.GameplayEntryPoint
   m_sceneUIRootPrefab: {fileID: 4109014006076167516, guid: 39bf2a5abfe528147a78025542a77ca8, type: 3}
+  m_levelView: {fileID: 825038645}
   m_playerView: {fileID: 1388237393}
-  m_enemyPositions:
-  - {fileID: 1319892597}
-  - {fileID: 2081478579}
-  - {fileID: 1500537257}
-  - {fileID: 234185800}
-  - {fileID: 66465780}
-  - {fileID: 487004237}
-  - {fileID: 998110597}
-  - {fileID: 1732064797}
-  - {fileID: 363949013}
 --- !u!4 &825038644
 Transform:
   m_ObjectHideFlags: 0
@@ -1101,6 +1333,30 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &825038645
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 825038642}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6c3a4df7e7d49c4fb9daa6d365b0528, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CombatArena.Game.Gameplay.Entities.Levels.GameplayLevelView
+  <ArenaEnterTrigger>k__BackingField: {fileID: 514963589}
+  <EnemySpawnerViews>k__BackingField:
+  - {fileID: 1319892598}
+  - {fileID: 2081478580}
+  - {fileID: 1500537258}
+  - {fileID: 234185801}
+  - {fileID: 66465781}
+  - {fileID: 487004238}
+  - {fileID: 998110598}
+  - {fileID: 1732064798}
+  - {fileID: 363949014}
+  <EnterGate>k__BackingField: {fileID: 619602835}
 --- !u!1 &995791278
 GameObject:
   m_ObjectHideFlags: 0
@@ -1237,8 +1493,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 998110597}
+  - component: {fileID: 998110598}
   m_Layer: 0
-  m_Name: Pos 1 (6)
+  m_Name: SpawnerView 7
   m_TagString: Untagged
   m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -1253,12 +1510,28 @@ Transform:
   m_GameObject: {fileID: 998110596}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 10.13, y: 0, z: 10.87}
+  m_LocalPosition: {x: 0.12, y: 0, z: 19.96}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1127001602}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &998110598
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 998110596}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed01bc4cd8861d349a085ddd7c328a90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CombatArena.Game.Gameplay.Entities.Enemy.EnemySpawnerView
+  <SpawnPoint>k__BackingField: {fileID: 998110597}
+  <SpawnAtStart>k__BackingField: 0
+  <SecondsUntilNextSpawn>k__BackingField: 80
+  <AvailableCheckRange>k__BackingField: 5
 --- !u!4 &1009708628 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1852576806548013000, guid: 2843e92f7e02ab04d8bc7180282b3c02, type: 3}
@@ -1279,7 +1552,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1127001602}
   m_Layer: 0
-  m_Name: EnemiesPositions
+  m_Name: EnemySpawners
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1441,7 +1714,7 @@ Transform:
   m_GameObject: {fileID: 1165982068}
   serializedVersion: 2
   m_LocalRotation: {x: 0.39044836, y: 0.346829, z: -0.16172901, w: 0.83731925}
-  m_LocalPosition: {x: -1.5, y: 5, z: -1.5}
+  m_LocalPosition: {x: -1.14, y: 5, z: -10.39}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1532,8 +1805,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1319892597}
+  - component: {fileID: 1319892598}
   m_Layer: 0
-  m_Name: Pos 1
+  m_Name: SpawnerView 1
   m_TagString: Untagged
   m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -1548,12 +1822,28 @@ Transform:
   m_GameObject: {fileID: 1319892596}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -11.12, y: 0, z: 12.83}
+  m_LocalPosition: {x: -0.28, y: 0, z: 10.24}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1127001602}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1319892598
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1319892596}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed01bc4cd8861d349a085ddd7c328a90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CombatArena.Game.Gameplay.Entities.Enemy.EnemySpawnerView
+  <SpawnPoint>k__BackingField: {fileID: 1319892597}
+  <SpawnAtStart>k__BackingField: 1
+  <SecondsUntilNextSpawn>k__BackingField: 20
+  <AvailableCheckRange>k__BackingField: 5
 --- !u!1 &1388237388
 GameObject:
   m_ObjectHideFlags: 0
@@ -1584,7 +1874,7 @@ Transform:
   m_GameObject: {fileID: 1388237388}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.36, y: 0, z: -8.89}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1747,8 +2037,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1500537257}
+  - component: {fileID: 1500537258}
   m_Layer: 0
-  m_Name: Pos 1 (2)
+  m_Name: SpawnerView 3
   m_TagString: Untagged
   m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -1763,12 +2054,28 @@ Transform:
   m_GameObject: {fileID: 1500537256}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -11.48, y: 0, z: 20.35}
+  m_LocalPosition: {x: 7.67, y: 0, z: 9.66}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1127001602}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1500537258
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1500537256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed01bc4cd8861d349a085ddd7c328a90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CombatArena.Game.Gameplay.Entities.Enemy.EnemySpawnerView
+  <SpawnPoint>k__BackingField: {fileID: 1500537257}
+  <SpawnAtStart>k__BackingField: 1
+  <SecondsUntilNextSpawn>k__BackingField: 35
+  <AvailableCheckRange>k__BackingField: 5
 --- !u!1 &1549544660
 GameObject:
   m_ObjectHideFlags: 0
@@ -2043,8 +2350,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1732064797}
+  - component: {fileID: 1732064798}
   m_Layer: 0
-  m_Name: Pos 1 (7)
+  m_Name: SpawnerView 8
   m_TagString: Untagged
   m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -2059,12 +2367,28 @@ Transform:
   m_GameObject: {fileID: 1732064796}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 11.74, y: 0, z: 7.35}
+  m_LocalPosition: {x: 21.36, y: 0, z: 1.98}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1127001602}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1732064798
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1732064796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed01bc4cd8861d349a085ddd7c328a90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CombatArena.Game.Gameplay.Entities.Enemy.EnemySpawnerView
+  <SpawnPoint>k__BackingField: {fileID: 1732064797}
+  <SpawnAtStart>k__BackingField: 0
+  <SecondsUntilNextSpawn>k__BackingField: 90
+  <AvailableCheckRange>k__BackingField: 5
 --- !u!4 &1919105895 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6344746033268854615, guid: a4fbc6dd771cfca41b78c81d3fa9c740, type: 3}
@@ -2115,8 +2439,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2081478579}
+  - component: {fileID: 2081478580}
   m_Layer: 0
-  m_Name: Pos 1 (1)
+  m_Name: SpawnerView 2
   m_TagString: Untagged
   m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -2131,12 +2456,28 @@ Transform:
   m_GameObject: {fileID: 2081478578}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -11.49, y: 0, z: 16.05}
+  m_LocalPosition: {x: -10.01, y: 0, z: 9.17}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1127001602}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2081478580
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2081478578}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed01bc4cd8861d349a085ddd7c328a90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CombatArena.Game.Gameplay.Entities.Enemy.EnemySpawnerView
+  <SpawnPoint>k__BackingField: {fileID: 2081478579}
+  <SpawnAtStart>k__BackingField: 1
+  <SecondsUntilNextSpawn>k__BackingField: 30
+  <AvailableCheckRange>k__BackingField: 5
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -2148,3 +2489,4 @@ SceneRoots:
   - {fileID: 1388237389}
   - {fileID: 405137939}
   - {fileID: 1127001602}
+  - {fileID: 514963591}

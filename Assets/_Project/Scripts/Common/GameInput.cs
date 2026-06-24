@@ -147,15 +147,6 @@ namespace CombatArena
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Test"",
-                    ""type"": ""Button"",
-                    ""id"": ""dbc3b311-c4b3-432e-ac24-13a642106dd4"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -409,17 +400,6 @@ namespace CombatArena
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
                     ""action"": ""AbilityB"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""6449bbbb-84ed-425d-958b-5cafc522a559"",
-                    ""path"": ""<Gamepad>/start"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Gamepad"",
-                    ""action"": ""Test"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -940,6 +920,54 @@ namespace CombatArena
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""UIGamepadButtons"",
+            ""id"": ""13280b0a-3c4a-47ba-a2ee-fe6fcbea368c"",
+            ""actions"": [
+                {
+                    ""name"": ""Submit"",
+                    ""type"": ""Button"",
+                    ""id"": ""8c165141-46e8-4511-80f8-d51536e03907"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Cancel"",
+                    ""type"": ""Button"",
+                    ""id"": ""938448f5-dbf3-423a-967b-82b4ead7dd93"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""b9b9f4ac-0b20-4cad-98cd-d58463c38ee4"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": ""Hold"",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Submit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6618bacf-ca3e-4af6-b6cb-d04eb6dac05f"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": ""Hold"",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Cancel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -1013,7 +1041,6 @@ namespace CombatArena
             m_Player_AbilityB = m_Player.FindAction("AbilityB", throwIfNotFound: true);
             m_Player_AbilityX = m_Player.FindAction("AbilityX", throwIfNotFound: true);
             m_Player_AbilityY = m_Player.FindAction("AbilityY", throwIfNotFound: true);
-            m_Player_Test = m_Player.FindAction("Test", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
             m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1026,12 +1053,17 @@ namespace CombatArena
             m_UI_ScrollWheel = m_UI.FindAction("ScrollWheel", throwIfNotFound: true);
             m_UI_TrackedDevicePosition = m_UI.FindAction("TrackedDevicePosition", throwIfNotFound: true);
             m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
+            // UIGamepadButtons
+            m_UIGamepadButtons = asset.FindActionMap("UIGamepadButtons", throwIfNotFound: true);
+            m_UIGamepadButtons_Submit = m_UIGamepadButtons.FindAction("Submit", throwIfNotFound: true);
+            m_UIGamepadButtons_Cancel = m_UIGamepadButtons.FindAction("Cancel", throwIfNotFound: true);
         }
 
         ~@GameInput()
         {
             UnityEngine.Debug.Assert(!m_Player.enabled, "This will cause a leak and performance issues, GameInput.Player.Disable() has not been called.");
             UnityEngine.Debug.Assert(!m_UI.enabled, "This will cause a leak and performance issues, GameInput.UI.Disable() has not been called.");
+            UnityEngine.Debug.Assert(!m_UIGamepadButtons.enabled, "This will cause a leak and performance issues, GameInput.UIGamepadButtons.Disable() has not been called.");
         }
 
         /// <summary>
@@ -1113,7 +1145,6 @@ namespace CombatArena
         private readonly InputAction m_Player_AbilityB;
         private readonly InputAction m_Player_AbilityX;
         private readonly InputAction m_Player_AbilityY;
-        private readonly InputAction m_Player_Test;
         /// <summary>
         /// Provides access to input actions defined in input action map "Player".
         /// </summary>
@@ -1149,10 +1180,6 @@ namespace CombatArena
             /// Provides access to the underlying input action "Player/AbilityY".
             /// </summary>
             public InputAction @AbilityY => m_Wrapper.m_Player_AbilityY;
-            /// <summary>
-            /// Provides access to the underlying input action "Player/Test".
-            /// </summary>
-            public InputAction @Test => m_Wrapper.m_Player_Test;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -1197,9 +1224,6 @@ namespace CombatArena
                 @AbilityY.started += instance.OnAbilityY;
                 @AbilityY.performed += instance.OnAbilityY;
                 @AbilityY.canceled += instance.OnAbilityY;
-                @Test.started += instance.OnTest;
-                @Test.performed += instance.OnTest;
-                @Test.canceled += instance.OnTest;
             }
 
             /// <summary>
@@ -1229,9 +1253,6 @@ namespace CombatArena
                 @AbilityY.started -= instance.OnAbilityY;
                 @AbilityY.performed -= instance.OnAbilityY;
                 @AbilityY.canceled -= instance.OnAbilityY;
-                @Test.started -= instance.OnTest;
-                @Test.performed -= instance.OnTest;
-                @Test.canceled -= instance.OnTest;
             }
 
             /// <summary>
@@ -1460,6 +1481,113 @@ namespace CombatArena
         /// Provides a new <see cref="UIActions" /> instance referencing this action map.
         /// </summary>
         public UIActions @UI => new UIActions(this);
+
+        // UIGamepadButtons
+        private readonly InputActionMap m_UIGamepadButtons;
+        private List<IUIGamepadButtonsActions> m_UIGamepadButtonsActionsCallbackInterfaces = new List<IUIGamepadButtonsActions>();
+        private readonly InputAction m_UIGamepadButtons_Submit;
+        private readonly InputAction m_UIGamepadButtons_Cancel;
+        /// <summary>
+        /// Provides access to input actions defined in input action map "UIGamepadButtons".
+        /// </summary>
+        public struct UIGamepadButtonsActions
+        {
+            private @GameInput m_Wrapper;
+
+            /// <summary>
+            /// Construct a new instance of the input action map wrapper class.
+            /// </summary>
+            public UIGamepadButtonsActions(@GameInput wrapper) { m_Wrapper = wrapper; }
+            /// <summary>
+            /// Provides access to the underlying input action "UIGamepadButtons/Submit".
+            /// </summary>
+            public InputAction @Submit => m_Wrapper.m_UIGamepadButtons_Submit;
+            /// <summary>
+            /// Provides access to the underlying input action "UIGamepadButtons/Cancel".
+            /// </summary>
+            public InputAction @Cancel => m_Wrapper.m_UIGamepadButtons_Cancel;
+            /// <summary>
+            /// Provides access to the underlying input action map instance.
+            /// </summary>
+            public InputActionMap Get() { return m_Wrapper.m_UIGamepadButtons; }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+            public void Enable() { Get().Enable(); }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+            public void Disable() { Get().Disable(); }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+            public bool enabled => Get().enabled;
+            /// <summary>
+            /// Implicitly converts an <see ref="UIGamepadButtonsActions" /> to an <see ref="InputActionMap" /> instance.
+            /// </summary>
+            public static implicit operator InputActionMap(UIGamepadButtonsActions set) { return set.Get(); }
+            /// <summary>
+            /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+            /// </summary>
+            /// <param name="instance">Callback instance.</param>
+            /// <remarks>
+            /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+            /// </remarks>
+            /// <seealso cref="UIGamepadButtonsActions" />
+            public void AddCallbacks(IUIGamepadButtonsActions instance)
+            {
+                if (instance == null || m_Wrapper.m_UIGamepadButtonsActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_UIGamepadButtonsActionsCallbackInterfaces.Add(instance);
+                @Submit.started += instance.OnSubmit;
+                @Submit.performed += instance.OnSubmit;
+                @Submit.canceled += instance.OnSubmit;
+                @Cancel.started += instance.OnCancel;
+                @Cancel.performed += instance.OnCancel;
+                @Cancel.canceled += instance.OnCancel;
+            }
+
+            /// <summary>
+            /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+            /// </summary>
+            /// <remarks>
+            /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+            /// </remarks>
+            /// <seealso cref="UIGamepadButtonsActions" />
+            private void UnregisterCallbacks(IUIGamepadButtonsActions instance)
+            {
+                @Submit.started -= instance.OnSubmit;
+                @Submit.performed -= instance.OnSubmit;
+                @Submit.canceled -= instance.OnSubmit;
+                @Cancel.started -= instance.OnCancel;
+                @Cancel.performed -= instance.OnCancel;
+                @Cancel.canceled -= instance.OnCancel;
+            }
+
+            /// <summary>
+            /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="UIGamepadButtonsActions.UnregisterCallbacks(IUIGamepadButtonsActions)" />.
+            /// </summary>
+            /// <seealso cref="UIGamepadButtonsActions.UnregisterCallbacks(IUIGamepadButtonsActions)" />
+            public void RemoveCallbacks(IUIGamepadButtonsActions instance)
+            {
+                if (m_Wrapper.m_UIGamepadButtonsActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            /// <summary>
+            /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+            /// </summary>
+            /// <remarks>
+            /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+            /// </remarks>
+            /// <seealso cref="UIGamepadButtonsActions.AddCallbacks(IUIGamepadButtonsActions)" />
+            /// <seealso cref="UIGamepadButtonsActions.RemoveCallbacks(IUIGamepadButtonsActions)" />
+            /// <seealso cref="UIGamepadButtonsActions.UnregisterCallbacks(IUIGamepadButtonsActions)" />
+            public void SetCallbacks(IUIGamepadButtonsActions instance)
+            {
+                foreach (var item in m_Wrapper.m_UIGamepadButtonsActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_UIGamepadButtonsActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
+        /// <summary>
+        /// Provides a new <see cref="UIGamepadButtonsActions" /> instance referencing this action map.
+        /// </summary>
+        public UIGamepadButtonsActions @UIGamepadButtons => new UIGamepadButtonsActions(this);
         private int m_KeyboardMouseSchemeIndex = -1;
         /// <summary>
         /// Provides access to the input control scheme.
@@ -1574,13 +1702,6 @@ namespace CombatArena
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnAbilityY(InputAction.CallbackContext context);
-            /// <summary>
-            /// Method invoked when associated input action "Test" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-            /// </summary>
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-            void OnTest(InputAction.CallbackContext context);
         }
         /// <summary>
         /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.
@@ -1659,6 +1780,28 @@ namespace CombatArena
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnTrackedDeviceOrientation(InputAction.CallbackContext context);
+        }
+        /// <summary>
+        /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UIGamepadButtons" which allows adding and removing callbacks.
+        /// </summary>
+        /// <seealso cref="UIGamepadButtonsActions.AddCallbacks(IUIGamepadButtonsActions)" />
+        /// <seealso cref="UIGamepadButtonsActions.RemoveCallbacks(IUIGamepadButtonsActions)" />
+        public interface IUIGamepadButtonsActions
+        {
+            /// <summary>
+            /// Method invoked when associated input action "Submit" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnSubmit(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Cancel" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnCancel(InputAction.CallbackContext context);
         }
     }
 }

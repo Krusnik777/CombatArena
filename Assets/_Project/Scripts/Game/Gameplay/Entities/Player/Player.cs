@@ -3,13 +3,17 @@ using CombatArena.Game.Configs;
 using CombatArena.Game.Gameplay.HealthSystem;
 using CombatArena.Game.Services;
 using R3;
+using UnityEngine;
 
 namespace CombatArena.Game.Gameplay.Entities.Player
 {
     public class Player : IDisposable, IAbilityAttacker, IAbilityMover
     {
+        public Subject<Player> OnDeath { get; }
+
         public PlayerAbilities Abilities { get; private set; }
         public Health Health { get; }
+        public Transform Transform => _view.transform; 
 
         private PlayerView _view;
         private GameInputService _gameInputService;
@@ -34,6 +38,7 @@ namespace CombatArena.Game.Gameplay.Entities.Player
             _view.Animator.Bind(_view.Movement);
 
             Health = new Health(new DamageProcessor(), _healthConfig.MaxHealth);
+            OnDeath = new();
 
             _healthListenerDisposable = Health.Value.Subscribe(OnHealthChange);
             _damageListenerDisposable = _view.Damageable.OnHitted.Subscribe(TakeDamage);
@@ -64,6 +69,14 @@ namespace CombatArena.Game.Gameplay.Entities.Player
                 _gameInputService.OnAbilityXPressed.Subscribe(_ => HandleAbilityXUse()),
                 _gameInputService.OnAbilityYPressed.Subscribe(_ => HandleAbilityYUse())
             };
+        }
+
+        public void Stop()
+        {
+            _abilitiesInputListenerDisposable?.Dispose();
+            _attackFinishListenerDisposable?.Dispose();
+
+            _view.Movement.SetActive(false);
         }
 
         public Observable<bool> Attack(AttackAbilityConfig config)
@@ -153,11 +166,13 @@ namespace CombatArena.Game.Gameplay.Entities.Player
         {
             if (currentValue <= 0)
             {
-                // Disable Movement And All Things 
+                Stop();
+                _view.Animator.PlayDeath();
                 // Death Sound
                 // Death Effect
-                // Death Animation
                 // Dispose Only At Animation End
+
+                OnDeath?.OnNext(this);
             }
         }
 

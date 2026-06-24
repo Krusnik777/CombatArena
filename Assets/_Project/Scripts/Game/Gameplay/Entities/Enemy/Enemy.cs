@@ -4,10 +4,12 @@ using CombatArena.Game.Gameplay.HealthSystem;
 using R3;
 using UnityEngine;
 
-namespace CombatArena.Game.Gameplay.Entities.Enemy
+namespace CombatArena.Game.Gameplay.Entities.Enemies
 {
     public class Enemy : IDisposable, IAbilityAttacker
     {
+        public Subject<Enemy> OnDeath { get; }
+
         public Health Health { get; }
 
         private EnemyConfig _config;
@@ -20,14 +22,17 @@ namespace CombatArena.Game.Gameplay.Entities.Enemy
         private IDisposable _damageListenerDisposable;
         private IDisposable _healthListenerDisposable;
         private IDisposable _attackFinishListenerDisposable;
+        private IDisposable _deathDisposable;
         
         public Enemy(EnemyConfig config, EnemyView view)
         {
             _config = config;
             _view = view;
 
-            Health = new(new DamageProcessor(), _config.MaxHealth);
             _attackAbility = new AttackAbility(config.AttackAbility, this);
+
+            Health = new(new DamageProcessor(), _config.MaxHealth);
+            OnDeath = new();
 
             _view.UIHealth.Bind(Health);
 
@@ -37,15 +42,7 @@ namespace CombatArena.Game.Gameplay.Entities.Enemy
 
         public void Dispose()
         {
-            _view.UIHealth?.Dispose();
-
-            _damageListenerDisposable?.Dispose();
-            _healthListenerDisposable?.Dispose();
-            _attackFinishListenerDisposable?.Dispose();
-
-            _attackAbility?.Dispose();
-            _currentPursuer?.Dispose();
-            _currentDamageDealer?.Dispose();
+            Stop();
 
             GameObject.Destroy(_view.gameObject);
         }
@@ -58,6 +55,20 @@ namespace CombatArena.Game.Gameplay.Entities.Enemy
             _currentPursuer.SetActionOnReach(TryToAttack);
 
             _currentPursuer.StartPursue();
+        }
+
+        public void Stop()
+        {
+            _view.UIHealth?.Dispose();
+
+            _damageListenerDisposable?.Dispose();
+            _healthListenerDisposable?.Dispose();
+            _attackFinishListenerDisposable?.Dispose();
+
+            _attackAbility?.Dispose();
+            _currentPursuer?.Dispose();
+            _currentDamageDealer?.Dispose();
+            _deathDisposable?.Dispose();
         }
 
         public Observable<bool> Attack(AttackAbilityConfig config)
@@ -96,13 +107,15 @@ namespace CombatArena.Game.Gameplay.Entities.Enemy
         {
             if (currentValue <= 0)
             {
-                // Disable Movement And All Things 
+                Stop();
+                _view.Damageable.gameObject.SetActive(false);
+                _view.Agent.enabled = false;
+                _view.Animator.PlayDeath();
                 // Death Sound
                 // Death Effect
-                // Death Animation
-                // Dispose Only At Animation End
+                _deathDisposable = Observable.Interval(TimeSpan.FromSeconds(3f)).Subscribe(_ => Dispose());
 
-                Dispose();
+                OnDeath?.OnNext(this);
             }
         }
 

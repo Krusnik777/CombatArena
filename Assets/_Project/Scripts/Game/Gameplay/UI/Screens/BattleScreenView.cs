@@ -1,3 +1,4 @@
+using TMPro;
 using UI.Windows;
 using UnityEngine;
 
@@ -9,5 +10,6 @@ namespace CombatArena.Game.Gameplay.UI
         [field: SerializeField] public UIAbility UIAbilityA { get; private set; }
         [field: SerializeField] public UIAbility UIAbilityX { get; private set; }
         [field: SerializeField] public UIAbility UIAbilityY { get; private set; }
+        [field: SerializeField] public TMP_Text EnemiesRemainingText { get; private set; }
     }
 }

@@ -9,6 +9,7 @@ namespace CombatArena.Game.Gameplay.UI
     public class UIHealth : MonoBehaviour, IDisposable
     {
         [SerializeField] private Image m_fillImage;
+        [SerializeField] private bool m_disableAtDispose = true;
 
         private Health _bindedHealth;
 
@@ -23,11 +24,15 @@ namespace CombatArena.Game.Gameplay.UI
             m_fillImage.fillAmount = 1;
 
             _healthValueChangeListenerDisposable = _bindedHealth.Value.Subscribe(OnHealthChange);
+
+            gameObject.SetActive(true);
         }
 
         public void Dispose()
         {
             DisposeOfListeners();
+
+            if (m_disableAtDispose) gameObject.SetActive(false);
         }
 
         private void DisposeOfListeners()
