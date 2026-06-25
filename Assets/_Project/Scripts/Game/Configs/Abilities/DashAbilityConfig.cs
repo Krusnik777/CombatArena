@@ -7,6 +7,7 @@ namespace CombatArena.Game.Configs
     {
         [field: SerializeField] public float DashDistance { get; private set; } = 5f;
         [field: SerializeField] public int DashSteps { get; private set; } = 10;
+        [field: SerializeField] public float DashSpeedMultiplier { get; private set; } = 0.5f;
 
         public override AbilityType Type => AbilityType.Dash;
         

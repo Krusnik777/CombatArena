@@ -12,7 +12,6 @@ namespace CombatArena.Game.Gameplay.Entities.Player
         [SerializeField] private Transform m_viewTransform;
 
         public Vector3 DirectionControl => _directionControl;
-
         public Transform LookTransform => m_viewTransform;
 
         private GameInputService _gameInputService;
@@ -90,11 +89,12 @@ namespace CombatArena.Game.Gameplay.Entities.Player
 
             for (int i = 0; i < config.DashSteps; i++)
             {
-                m_characterController.Move(dir * stepDistance);
+                m_characterController.Move(dir * stepDistance * config.DashSpeedMultiplier);
                 yield return null;
             }
-
+            
             _isDashing = false;
+
             onEnd?.Invoke();
         }
 

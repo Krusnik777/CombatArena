@@ -69,16 +69,18 @@ namespace CombatArena.Game.Root
         {
             _cachedSceneContainer?.Dispose();
 
-            var sometimesFailingLoadingStep = _loadingManager.CreateSometimesFailingLoadingStep("Imitating Sometimes Failing Service", 1000, () => {}, 
+            var someFakeAwaitableService = new FakeAwaitableService();
+
+            var sometimesFailingLoadingStep = someFakeAwaitableService.CreateSometimesFailingLoadingStep("Imitating Sometimes Failing Service", 1000, () => {}, 
                 () => _errorLoadingImitationWasExperienced = true, isFromBootstrap || _errorLoadingImitationWasExperienced ? 0.5f : 1f);
 
             List<LoadingStep> steps = new()
             {
                 _loadingManager.CreateSceneLoadingStep(Scenes.BOOTSTRAP, isFromBootstrap ? "Initializing Global Services..." : "Scene Cleanup..."),
-                _loadingManager.CreateWaitingLoadingStep("Imitating Some Service Initialization...", 250, () => {}),
-                _loadingManager.CreateWaitingLoadingStep("Imitating Another Service Initialization...", 250, () => {}),
+                someFakeAwaitableService.CreateLoadingStep("Imitating Some Service Initialization...", 250, () => {}),
+                someFakeAwaitableService.CreateLoadingStep("Imitating Another Service Initialization...", 250, () => {}),
                 sometimesFailingLoadingStep,
-                _loadingManager.CreateWaitingLoadingStep("Imitating One More Service Initialization...", 250, () => {})
+                someFakeAwaitableService.CreateLoadingStep("Imitating One More Service Initialization...", 250, () => {})
             };
 
             var finalLoadingStep = _loadingManager.CreateWaitingLoadingStep("Final Scene Setup...", 250, () => HandleGameplayEntryPoint(enterParams));

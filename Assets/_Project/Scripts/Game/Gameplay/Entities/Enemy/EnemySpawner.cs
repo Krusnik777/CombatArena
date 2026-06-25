@@ -66,6 +66,8 @@ namespace CombatArena.Game.Gameplay.Entities.Enemies
 
             var enemy = _enemyFactory.CreateRandomEnemy(_view.SpawnPoint.position);
             OnEnemySpawned.OnNext(enemy);
+
+            _view.Effect.Play();
         }
     }
 }

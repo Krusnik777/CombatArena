@@ -141,13 +141,13 @@ namespace CombatArena.Game.Gameplay.Entities.Player
             var finishedDash = new Subject<bool>();
 
             Health.SetIgnoreDamage(true);
-            // Show Dash Effect
+            _view.DashEffects.Show();
             // Play Dash Sound
 
             _view.Movement.PerformDash(config, () =>
             {
                 Health.SetIgnoreDamage(false);
-                // Stop Dash Effect
+                _view.DashEffects.Hide();
 
                 _currentActiveAbility = null;
 

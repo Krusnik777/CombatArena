@@ -108,28 +108,6 @@ namespace Loading
             });
         }
 
-        public LoadingStep CreateSometimesFailingLoadingStep(string description, int waitingTime, System.Action actionOnSuccess, System.Action actionOnFailure, float failureChance = 0.5f)
-        {
-            var failureData = new LoadingStepFailureData($"[IMITATION] Loading Error", $"[IMITATION] Trying Again");
-
-            return new LoadingStep(description, async () =>
-            {
-                await UniTask.Delay(waitingTime);
-
-                if (UnityEngine.Random.value > 1 - failureChance)
-                {
-                    actionOnFailure?.Invoke();
-
-                    throw new System.Exception("Error loading imitation");
-                }
-                else
-                {
-                    actionOnSuccess?.Invoke();
-                }
-
-            }, failureData);
-        }
-
         private async UniTask LoadSceneTask(string sceneName, int delayTime = 500)
         {
             var asyncOperation = SceneManager.LoadSceneAsync(sceneName);

@@ -5,29 +5,29 @@ namespace CombatArena.Game.Gameplay.Entities
 {
     public class AnimatorEventsCollector : MonoBehaviour
     {
-        public Subject<Unit> OnAttackStart { get; private set;} = new();
-        public Subject<Unit> OnAttackExecute { get; private set;} = new();
-        public Subject<Unit> OnAttackFinish { get; private set;} = new();
+        public Subject<int> OnFootstep { get; private set;} = new();
+        public Subject<int> OnAttackStart { get; private set;} = new();
+        public Subject<int> OnAttackExecute { get; private set;} = new();
+        public Subject<int> OnAttackFinish { get; private set;} = new();
 
-        public void OnStep()
+        public void OnStep(int legIndex)
         {
-            // Play Sound Footstep
-            // Play Particle Footstep
+            OnFootstep?.OnNext(legIndex);
         }
 
-        public void OnAttackStarted()
+        public void OnAttackStarted(int attackType)
         {
-            OnAttackStart?.OnNext(Unit.Default);
+            OnAttackStart?.OnNext(attackType);
         }
 
-        public void OnAttackExecuted()
+        public void OnAttackExecuted(int attackType)
         {
-            OnAttackExecute?.OnNext(Unit.Default);
+            OnAttackExecute?.OnNext(attackType);
         }
 
-        public void OnAttackFinished()
+        public void OnAttackFinished(int attackType)
         {
-            OnAttackFinish?.OnNext(Unit.Default);
+            OnAttackFinish?.OnNext(attackType);
         }
     }
 }
