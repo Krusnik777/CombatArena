@@ -1,14 +1,17 @@
 using System;
 using R3;
+using UI.Tooltips;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace CombatArena.Game.Gameplay.UI
 {
-    public class UIAbility : MonoBehaviour, IDisposable
+    public class UIAbility : TooltipTrigger, IDisposable
     {
         [SerializeField] private Image m_icon;
         [SerializeField] private Image m_fillReadyImage;
+
+        protected override TooltipType _tooltipeType => TooltipType.Ability;
 
         private Ability _bindedAbility;
 
@@ -30,11 +33,31 @@ namespace CombatArena.Game.Gameplay.UI
                 ability.OnExecuted.Subscribe(_ => StartListenAbilityCooldown()),
                 ability.OnCooldownCompleted.Subscribe(_ => StopListenAbilityCooldown())
             };
+
+            ChangeTooltipIfActive();
         }
 
         public void Dispose()
         {
             DisposeOfListeners();
+        }
+
+        public override TooltipData GetTooltipData()
+        {
+            if (_bindedAbility == null) return null;
+
+            string infoText = "Cooldown: None";
+
+            if (_bindedAbility.Config.Cooldown > 0)
+            {
+                TimeSpan time = TimeSpan.FromSeconds(_bindedAbility.Config.Cooldown);
+                string mins = time.Minutes > 0 ? $" {time.Minutes} m" : "";
+                string seconds = time.Seconds > 0 ? $" {time.Seconds} s" : "";
+
+                infoText = $"Cooldown:{mins}{seconds}";
+            }
+
+            return new TooltipData(_bindedAbility.Config.Name, _bindedAbility.Config.Description, infoText);
         }
 
         private void DisposeOfListeners()
@@ -47,7 +70,7 @@ namespace CombatArena.Game.Gameplay.UI
         {
             _cooldownListenerDisposable = Observable.EveryUpdate().Subscribe(_ =>
             {
-               m_fillReadyImage.fillAmount = 1f - _bindedAbility.CurrentCooldownRate; 
+                m_fillReadyImage.fillAmount = 1f - _bindedAbility.CurrentCooldownRate;
             });
         }
 

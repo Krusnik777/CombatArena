@@ -3,13 +3,15 @@ using CombatArena.Game.Gameplay.HealthSystem;
 using UnityEngine;
 using UnityEngine.UI;
 using R3;
+using UI.Tooltips;
 
 namespace CombatArena.Game.Gameplay.UI
 {
-    public class UIHealth : MonoBehaviour, IDisposable
+    public class UIHealth : TooltipTrigger, IDisposable
     {
         [SerializeField] private Image m_fillImage;
-        [SerializeField] private bool m_disableAtDispose = true;
+
+        protected override TooltipType _tooltipeType => TooltipType.Health;
 
         private Health _bindedHealth;
 
@@ -25,14 +27,21 @@ namespace CombatArena.Game.Gameplay.UI
 
             _healthValueChangeListenerDisposable = _bindedHealth.Value.Subscribe(OnHealthChange);
 
+            ChangeTooltipIfActive();
+
             gameObject.SetActive(true);
         }
 
         public void Dispose()
         {
             DisposeOfListeners();
+        }
 
-            if (m_disableAtDispose) gameObject.SetActive(false);
+        public override TooltipData GetTooltipData()
+        {
+            if (_bindedHealth == null) return null;
+
+            return new TooltipData("Health", _bindedHealth.HealthStatus);
         }
 
         private void DisposeOfListeners()

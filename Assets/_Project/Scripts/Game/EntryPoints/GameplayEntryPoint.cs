@@ -1,13 +1,14 @@
 using DI;
 using CombatArena.Game.Root;
 using CombatArena.Game.Services;
-using UI;
-using R3;
-using UnityEngine;
 using CombatArena.Game.Gameplay.Entities.Player;
 using CombatArena.Game.Gameplay.Entities.Enemies;
 using CombatArena.Game.StateMachines;
 using CombatArena.Game.Gameplay.Entities.Levels;
+using UI;
+using R3;
+using UnityEngine;
+
 
 namespace CombatArena.Game.EntryPoints
 {
@@ -23,8 +24,6 @@ namespace CombatArena.Game.EntryPoints
 
         public override Observable<GameplayExitParameters> Run(DIContainer sceneContainer, GameplayEnterParameters enterParameters)
         {
-            Debug.Log("ENTRY POINT: Started Gameplay");
-
             _onEnd = new();
             RegisterLocalInstances(sceneContainer, enterParameters);
 
@@ -81,6 +80,10 @@ namespace CombatArena.Game.EntryPoints
             var windowsFactory = new GameplayWindowsFactory(uiSceneRoot.ScreensTransform, uiSceneRoot.PopupsTransform);
             sceneContainer.RegisterInstance(new UIWindowsProvider(windowsFactory));
             //sceneContainer.RegisterFactory(_ => new UIWindowsProvider(windowsFactory)).AsSingle();
+
+            var tooltipsFactory = new TooltipsFactory(uiSceneRoot.TooltipsCanvas.transform);
+            var tooltipsHandler = new TooltipsService(uiSceneRoot.TooltipsCanvas, uiSceneRoot.TooltipOffset, tooltipsFactory);
+            sceneContainer.RegisterInstance(tooltipsHandler as UI.Tooltips.ITooltipHandler);
         }
     }
 }

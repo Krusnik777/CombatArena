@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CombatArena.Game.Configs.EnemyConfig
   <ID>k__BackingField: hobgoblin_enemy
   <PrefabName>k__BackingField: Hobgoblin_EnemyView
+  <Name>k__BackingField: Hobgoblin
   <MaxHealth>k__BackingField: 80
   <ArmorDefenceChance>k__BackingField: 0.2
   <Armor>k__BackingField: 8

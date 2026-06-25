@@ -1,10 +1,9 @@
-using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
-using UnityEngine.SceneManagement;
+using Loading;
 using R3;
 using DI;
-using Utils;
 using CombatArena.Game.EntryPoints;
 using CombatArena.Game.Services;
 
@@ -14,11 +13,13 @@ namespace CombatArena.Game.Root
     {
         private static GameEntryPoint _instance;
 
-        private Coroutines _coroutines;
-        private UIRootView _uiRoot;
-
+        private readonly UIRootView _uiRoot;
+        private readonly LoadingManager _loadingManager;
+        
         private readonly DIContainer _rootContainer = new();
         private DIContainer _cachedSceneContainer;
+
+        private bool _errorLoadingImitationWasExperienced = false;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         public static void AutostartGame()
@@ -29,28 +30,27 @@ namespace CombatArena.Game.Root
 
         private GameEntryPoint()
         {
-            _coroutines = new GameObject("[COROUTINES]").AddComponent<Coroutines>();
-            Object.DontDestroyOnLoad(_coroutines.gameObject);
-
             var prefabUIRoot = Resources.Load<UIRootView>("UIRoot");
             _uiRoot = Object.Instantiate(prefabUIRoot);
             Object.DontDestroyOnLoad(_uiRoot.gameObject);
             _rootContainer.RegisterInstance(_uiRoot);
+
+            _loadingManager = new(_uiRoot.LoadingScreen);
 
             SetupAudioService();
             SetupInputServices();
             SetupProviders();
         }
 
-        private /*async*/ void RunGame()
+        private void RunGame()
         {
             #if UNITY_EDITOR
 
-            var sceneName = SceneManager.GetActiveScene().name;
+            var sceneName = _loadingManager.GetActiveSceneName();
 
             if (sceneName == Scenes.GAMEPLAY)
             {
-                StartGameplay(new GameplayEnterParameters(0));
+                LoadAndStartGameplay(new GameplayEnterParameters(0), true);
 
                 return;
             }
@@ -62,52 +62,55 @@ namespace CombatArena.Game.Root
             
             #endif
 
-            StartGameplay(new GameplayEnterParameters(0));
+            LoadAndStartGameplay(new GameplayEnterParameters(0), true);
         }
 
-        private void StartGameplay(GameplayEnterParameters enterParams) => _coroutines.StartCoroutine(LoadAndStartGameplay(enterParams));
-
-        #region Routines
-
-        private IEnumerator LoadAndStartGameplay(GameplayEnterParameters enterParams)
+        private void LoadAndStartGameplay(GameplayEnterParameters enterParams, bool isFromBootstrap = false)
         {
-            _uiRoot.ShowLoadingScreen();
             _cachedSceneContainer?.Dispose();
 
-            yield return LoadScene(Scenes.BOOTSTRAP);
-            yield return LoadScene(Scenes.GAMEPLAY);
+            var sometimesFailingLoadingStep = _loadingManager.CreateSometimesFailingLoadingStep("Imitating Sometimes Failing Service", 1000, () => {}, 
+                () => _errorLoadingImitationWasExperienced = true, isFromBootstrap || _errorLoadingImitationWasExperienced ? 0.5f : 1f);
 
-            yield return new WaitForSeconds(1);
+            List<LoadingStep> steps = new()
+            {
+                _loadingManager.CreateSceneLoadingStep(Scenes.BOOTSTRAP, isFromBootstrap ? "Initializing Global Services..." : "Scene Cleanup..."),
+                _loadingManager.CreateWaitingLoadingStep("Imitating Some Service Initialization...", 250, () => {}),
+                _loadingManager.CreateWaitingLoadingStep("Imitating Another Service Initialization...", 250, () => {}),
+                sometimesFailingLoadingStep,
+                _loadingManager.CreateWaitingLoadingStep("Imitating One More Service Initialization...", 250, () => {})
+            };
 
-            var sceneEntryPoint = Object.FindFirstObjectByType<EntryPoint<GameplayEnterParameters,GameplayExitParameters>>();
+            var finalLoadingStep = _loadingManager.CreateWaitingLoadingStep("Final Scene Setup...", 250, () => HandleGameplayEntryPoint(enterParams));
+            _loadingManager.LoadScene(Scenes.GAMEPLAY, steps, finalLoadingStep);
+        }
+
+        private void HandleGameplayEntryPoint(GameplayEnterParameters enterParams)
+        {
+            var sceneEntryPoint = Object.FindFirstObjectByType<EntryPoint<GameplayEnterParameters, GameplayExitParameters>>();
             var sceneContainer = _cachedSceneContainer = new DIContainer(_rootContainer);
             sceneEntryPoint.Run(sceneContainer, enterParams).Subscribe(exitParameters =>
             {
                 if (exitParameters.ExitTag == GameplayExitTags.RESTART)
                 {
-                    StartGameplay(new GameplayEnterParameters(exitParameters.Runs));
+                    LoadAndStartGameplay(new GameplayEnterParameters(exitParameters.Runs));
 
                     return;
                 }
 
                 if (exitParameters.ExitTag == GameplayExitTags.NEXT)
                 {
-                    StartGameplay(new GameplayEnterParameters(exitParameters.Runs));
+                    LoadAndStartGameplay(new GameplayEnterParameters(exitParameters.Runs));
 
                     return;
                 }
 
                 if (exitParameters.ExitTag == GameplayExitTags.EXIT)
                 {
-
                     #if UNITY_EDITOR
-
-                    StartGameplay(new GameplayEnterParameters(0));
-
+                    LoadAndStartGameplay(new GameplayEnterParameters(0));
                     #else
-
                     Application.Quit();
-                    
                     #endif
 
                     return;
@@ -115,16 +118,7 @@ namespace CombatArena.Game.Root
 
                 throw new System.NotImplementedException("[Gameplay Exit Parameters] Current exit parameters currently not supported");
             });
-
-            _uiRoot.HideLoadingScreen();
         }
-
-        private IEnumerator LoadScene(string sceneName)
-        {
-            yield return SceneManager.LoadSceneAsync(sceneName);
-        }
-
-        #endregion
 
         #region Services Setup Methods
 

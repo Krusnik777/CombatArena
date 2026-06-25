@@ -24,15 +24,15 @@ namespace CombatArena.Game.StateMachines
 
         public void Enter(bool isVictory)
         {
-            var player = _sceneContainer.Resolve<Player>();
-            player.Stop();
-
             var levelController = _sceneContainer.Resolve<GameplayLevelController>();
             levelController.StopSpawnersAndEnemies();
+
+            var player = _sceneContainer.Resolve<Player>();
+            player.Stop();
+            
             // LATER: Play victory music or fail music
 
             var gameInputService = _sceneContainer.Resolve<GameInputService>();
-
             var windowsProvider = _sceneContainer.Resolve<UIWindowsProvider>();
 
             if (isVictory)
@@ -57,8 +57,6 @@ namespace CombatArena.Game.StateMachines
                     invoker.InvokeBindedAction();
                 });
             }
-
-            
         }
 
         public void Exit()

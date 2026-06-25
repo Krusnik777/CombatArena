@@ -1,26 +1,12 @@
-﻿using UnityEngine;
+﻿using Loading;
+using UnityEngine;
 
 namespace CombatArena.Game.Root
 {
     public class UIRootView : MonoBehaviour
     {
-        [SerializeField] private GameObject _loadingScreen;
+        [field: SerializeField] public LoadingScreen LoadingScreen { get; private set; }
         [SerializeField] private Transform _uiSceneContainer;
-
-        private void Awake()
-        {
-            HideLoadingScreen();
-        }
-
-        public void ShowLoadingScreen()
-        {
-            _loadingScreen.SetActive(true);
-        }
-
-        public void HideLoadingScreen()
-        {
-            _loadingScreen.SetActive(false);
-        }
 
         public void AttachSceneUI(GameObject sceneUI)
         {

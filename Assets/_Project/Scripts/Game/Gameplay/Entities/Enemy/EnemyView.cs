@@ -12,5 +12,6 @@ namespace CombatArena.Game.Gameplay.Entities.Enemies
         [field: SerializeField] public EnemyAnimator Animator { get; private set; }
         [field: SerializeField] public AnimatorEventsCollector EventsCollector { get; private set; }
         [field: SerializeField] public UIHealth UIHealth { get; private set; }
+        [field: SerializeField] public GameObject ChosenEffect { get; private set; }
     }
 }

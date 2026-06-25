@@ -33,6 +33,7 @@ namespace CombatArena.Game.StateMachines
             player.AssignAbilities(playerAbilities);
 
             var levelController = _sceneContainer.Resolve<GameplayLevelController>();
+            levelController.AssignEnemyDetector(player.EnableEnemyDetector());
             levelController.SetEnterGateEnabled(true);
             levelController.StartSpawners(_sceneContainer.Resolve<EnemyFactory>(), player.Transform);
 
@@ -40,6 +41,7 @@ namespace CombatArena.Game.StateMachines
 
             var screen = _sceneContainer.Resolve<UIWindowsProvider>().ShowScreen<BattleScreen>();
             screen.Initialize(player, levelController);
+            screen.BindTooltipHandler(_sceneContainer.Resolve<UI.Tooltips.ITooltipHandler>());
 
             _enemiesDeathsListenerDisposable = levelController.OnEnemyDied.Where(enemiesRemained => enemiesRemained <= 0).Subscribe(_ =>
             {

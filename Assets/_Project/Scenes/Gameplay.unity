@@ -165,7 +165,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CombatArena.Game.Gameplay.Entities.Enemy.EnemySpawnerView
   <SpawnPoint>k__BackingField: {fileID: 66465780}
   <SpawnAtStart>k__BackingField: 0
-  <SecondsUntilNextSpawn>k__BackingField: 50
+  <SecondsUntilNextSpawn>k__BackingField: 30
   <AvailableCheckRange>k__BackingField: 5
 --- !u!1 &81639765
 GameObject:
@@ -329,8 +329,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CombatArena.Game.Gameplay.Entities.Enemy.EnemySpawnerView
   <SpawnPoint>k__BackingField: {fileID: 234185800}
-  <SpawnAtStart>k__BackingField: 0
-  <SecondsUntilNextSpawn>k__BackingField: 25
+  <SpawnAtStart>k__BackingField: 1
+  <SecondsUntilNextSpawn>k__BackingField: 20
   <AvailableCheckRange>k__BackingField: 5
 --- !u!1 &363949012
 GameObject:
@@ -377,8 +377,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CombatArena.Game.Gameplay.Entities.Enemy.EnemySpawnerView
   <SpawnPoint>k__BackingField: {fileID: 363949013}
-  <SpawnAtStart>k__BackingField: 0
-  <SecondsUntilNextSpawn>k__BackingField: 100
+  <SpawnAtStart>k__BackingField: 1
+  <SecondsUntilNextSpawn>k__BackingField: 30
   <AvailableCheckRange>k__BackingField: 5
 --- !u!1 &387990056
 GameObject:
@@ -717,7 +717,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CombatArena.Game.Gameplay.Entities.Enemy.EnemySpawnerView
   <SpawnPoint>k__BackingField: {fileID: 487004237}
   <SpawnAtStart>k__BackingField: 0
-  <SecondsUntilNextSpawn>k__BackingField: 60
+  <SecondsUntilNextSpawn>k__BackingField: 40
   <AvailableCheckRange>k__BackingField: 5
 --- !u!1 &514963588
 GameObject:
@@ -1530,7 +1530,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CombatArena.Game.Gameplay.Entities.Enemy.EnemySpawnerView
   <SpawnPoint>k__BackingField: {fileID: 998110597}
   <SpawnAtStart>k__BackingField: 0
-  <SecondsUntilNextSpawn>k__BackingField: 80
+  <SecondsUntilNextSpawn>k__BackingField: 40
   <AvailableCheckRange>k__BackingField: 5
 --- !u!4 &1009708628 stripped
 Transform:
@@ -2387,7 +2387,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CombatArena.Game.Gameplay.Entities.Enemy.EnemySpawnerView
   <SpawnPoint>k__BackingField: {fileID: 1732064797}
   <SpawnAtStart>k__BackingField: 0
-  <SecondsUntilNextSpawn>k__BackingField: 90
+  <SecondsUntilNextSpawn>k__BackingField: 30
   <AvailableCheckRange>k__BackingField: 5
 --- !u!4 &1919105895 stripped
 Transform:

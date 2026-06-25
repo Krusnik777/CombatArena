@@ -7,6 +7,7 @@ namespace CombatArena.Game.Configs
     {
         [field: SerializeField] public string ID { get; private set; }
         [field: SerializeField] public string PrefabName { get; private set; }
+        [field: SerializeField] public string Name { get; private set; }
         [field: SerializeField] public int MaxHealth { get; private set; } = 50;
         [field: SerializeField][field: Range(0f, 1f)] public float ArmorDefenceChance { get; private set; } = 0.05f;
         [field: SerializeField] public int Armor { get; private set; } = 5;

@@ -14,7 +14,7 @@ namespace CombatArena.Game.Gameplay.Entities.Player
         private const float _movementThreshold = 0.05f;
 
         private PlayerAvatarMovement _movement;
-        private bool _isActive;
+        private bool _isActive = true;
 
         public void Bind(PlayerAvatarMovement movement)
         {

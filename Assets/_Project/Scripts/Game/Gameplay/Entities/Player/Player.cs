@@ -17,10 +17,12 @@ namespace CombatArena.Game.Gameplay.Entities.Player
 
         private PlayerView _view;
         private GameInputService _gameInputService;
+        private PlayerAvatarConfig _avatarConfig;
         private PlayerHealthConfig _healthConfig;
 
         private Ability _currentActiveAbility;
         private IDamageDealer _currentDamageDealer;
+        private IEnemyDetector _enemyDetector;
 
         private CompositeDisposable _abilitiesInputListenerDisposable;
 
@@ -33,9 +35,11 @@ namespace CombatArena.Game.Gameplay.Entities.Player
             _view = view;
             _gameInputService = gameInputService;
             _healthConfig = configsProvider.HealthConfig;
+            _avatarConfig = configsProvider.AvatarConfig;
 
-            _view.Movement.Bind(configsProvider.AvatarConfig, gameInputService);
+            _view.Movement.Bind(_avatarConfig, gameInputService);
             _view.Animator.Bind(_view.Movement);
+            _view.Animator.SetActive(true);
 
             Health = new Health(new DamageProcessor(), _healthConfig.MaxHealth);
             OnDeath = new();
@@ -54,6 +58,7 @@ namespace CombatArena.Game.Gameplay.Entities.Player
 
             Abilities?.Dispose();
             _currentDamageDealer?.Dispose();
+            _enemyDetector?.Dispose();
         }
 
         public void AssignAbilities(PlayerAbilities abilitiesBundle)
@@ -71,12 +76,23 @@ namespace CombatArena.Game.Gameplay.Entities.Player
             };
         }
 
+        public IEnemyDetector EnableEnemyDetector()
+        {
+            _enemyDetector?.Dispose();
+
+            _enemyDetector = new EnemyDetector(Root.LayerMasks.Enemy, Transform, _avatarConfig.EnemyDetectionRange);
+
+            return _enemyDetector;
+        }
+
         public void Stop()
         {
             _abilitiesInputListenerDisposable?.Dispose();
             _attackFinishListenerDisposable?.Dispose();
+            _enemyDetector?.Dispose();
 
             _view.Movement.SetActive(false);
+            _view.Animator.SetActive(false);
         }
 
         public Observable<bool> Attack(AttackAbilityConfig config)

@@ -22,11 +22,13 @@ namespace CombatArena.Game.Gameplay.HealthSystem
         public Observable<int> Value => _currentValue;
         public Subject<HealthChange> OnChange { get; }
 
-        private bool _ignoreDamage;
+        public string HealthStatus => $"{_currentValue.Value}/{MaxValue}";
 
         private IDamageProcessor _damageProcessor;
 
         private ReactiveProperty<int> _currentValue;
+
+        private bool _ignoreDamage;
 
         public Health(IDamageProcessor damageProcessor, int maxValue)
         {

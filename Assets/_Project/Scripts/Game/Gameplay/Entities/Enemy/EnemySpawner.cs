@@ -10,6 +10,7 @@ namespace CombatArena.Game.Gameplay.Entities.Enemies
 
         private EnemySpawnerView _view;
         private EnemyFactory _enemyFactory;
+        private Func<bool> _isSpawnAllowed;
 
         private LayerMask _checkMask;
 
@@ -17,10 +18,11 @@ namespace CombatArena.Game.Gameplay.Entities.Enemies
 
         private IDisposable _secondsCounterDisposable;
 
-        public EnemySpawner(EnemySpawnerView view, EnemyFactory enemyFactory)
+        public EnemySpawner(EnemySpawnerView view, EnemyFactory enemyFactory, Func<bool> isSpawnAllowed = null)
         {
             _view = view;
             _enemyFactory = enemyFactory;
+            _isSpawnAllowed = isSpawnAllowed ?? (() => true);
 
             OnEnemySpawned = new();
 
@@ -49,6 +51,13 @@ namespace CombatArena.Game.Gameplay.Entities.Enemies
 
         private void TryToSpawn()
         {
+            if (!_isSpawnAllowed())
+            {
+                _currentTime = _view.SecondsUntilNextSpawn/2;
+
+                return;
+            }
+
             Collider[] colliders = Physics.OverlapSphere(_view.SpawnPoint.position, _view.AvailableCheckRange, _checkMask);
 
             if (colliders != null && colliders.Length > 0) return;

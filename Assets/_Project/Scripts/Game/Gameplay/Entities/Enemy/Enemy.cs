@@ -9,8 +9,12 @@ namespace CombatArena.Game.Gameplay.Entities.Enemies
     public class Enemy : IDisposable, IAbilityAttacker
     {
         public Subject<Enemy> OnDeath { get; }
+        public Subject<Enemy> OnDeleted { get; }
 
         public Health Health { get; }
+        public string Name => _config.Name;
+
+        public bool IsSameView(EnemyView enemyView) => enemyView == _view;
 
         private EnemyConfig _config;
         private EnemyView _view;
@@ -33,6 +37,7 @@ namespace CombatArena.Game.Gameplay.Entities.Enemies
 
             Health = new(new DamageProcessor(), _config.MaxHealth);
             OnDeath = new();
+            OnDeleted = new();
 
             _view.UIHealth.Bind(Health);
 
@@ -43,8 +48,6 @@ namespace CombatArena.Game.Gameplay.Entities.Enemies
         public void Dispose()
         {
             Stop();
-
-            GameObject.Destroy(_view.gameObject);
         }
 
         public void AssignPursueTarget(Transform target)
@@ -59,6 +62,13 @@ namespace CombatArena.Game.Gameplay.Entities.Enemies
 
         public void Stop()
         {
+            _deathDisposable?.Dispose();
+
+            _view.Damageable.gameObject.SetActive(false);
+            _view.ChosenEffect.SetActive(false);
+            _view.Agent.enabled = false;
+
+            _view.UIHealth.gameObject.SetActive(false);
             _view.UIHealth?.Dispose();
 
             _damageListenerDisposable?.Dispose();
@@ -68,7 +78,6 @@ namespace CombatArena.Game.Gameplay.Entities.Enemies
             _attackAbility?.Dispose();
             _currentPursuer?.Dispose();
             _currentDamageDealer?.Dispose();
-            _deathDisposable?.Dispose();
         }
 
         public Observable<bool> Attack(AttackAbilityConfig config)
@@ -108,12 +117,15 @@ namespace CombatArena.Game.Gameplay.Entities.Enemies
             if (currentValue <= 0)
             {
                 Stop();
-                _view.Damageable.gameObject.SetActive(false);
-                _view.Agent.enabled = false;
                 _view.Animator.PlayDeath();
                 // Death Sound
                 // Death Effect
-                _deathDisposable = Observable.Interval(TimeSpan.FromSeconds(3f)).Subscribe(_ => Dispose());
+                _deathDisposable = Observable.Interval(TimeSpan.FromSeconds(3f)).Subscribe(_ =>
+                {
+                    OnDeleted?.OnNext(this);
+                    _view.gameObject.SetActive(false);
+                    Dispose();
+                });
 
                 OnDeath?.OnNext(this);
             }

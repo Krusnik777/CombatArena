@@ -10,5 +10,7 @@ namespace CombatArena.Game.Configs
         [field: SerializeField] public float RotationSpeed { get; private set; } = 250f;
         [field: SerializeField] public bool IsMovementIsometric  { get; private set; } = true;
         [field: SerializeField] public bool IsInputReverseMovement { get; private set; } = false;
+        [field: Header("Detection")]
+        [field: SerializeField] public float EnemyDetectionRange { get; private set; } = 5f;
     }
 }

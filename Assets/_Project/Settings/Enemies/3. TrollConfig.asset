@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CombatArena.Game.Configs.EnemyConfig
   <ID>k__BackingField: troll_enemy
   <PrefabName>k__BackingField: Troll_EnemyView
+  <Name>k__BackingField: Troll
   <MaxHealth>k__BackingField: 140
   <ArmorDefenceChance>k__BackingField: 0.1
   <Armor>k__BackingField: 10

@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CombatArena.Game.Configs.EnemyConfig
   <ID>k__BackingField: skeleton_enemy
   <PrefabName>k__BackingField: Skeleton_EnemyView
+  <Name>k__BackingField: Skeleton
   <MaxHealth>k__BackingField: 100
   <ArmorDefenceChance>k__BackingField: 0.01
   <Armor>k__BackingField: 2

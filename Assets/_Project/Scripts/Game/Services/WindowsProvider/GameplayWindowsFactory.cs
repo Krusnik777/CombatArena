@@ -8,10 +8,10 @@ namespace CombatArena.Game.Services
 {
     public class GameplayWindowsFactory : IWindowsFactory
     {
-        private string _beforeBattleScreenViewName = "BeforeBattleScreenView";
-        private string _battleScreenViewName = "BattleScreenView";
-        private string _victoryScreenViewName = "VictoryScreenView";
-        private string _defeatScreenViewName = "DefeatScreenView";
+        private const string _beforeBattleScreenViewName = "BeforeBattleScreenView";
+        private const string _battleScreenViewName = "BattleScreenView";
+        private const string _victoryScreenViewName = "VictoryScreenView";
+        private const string _defeatScreenViewName = "DefeatScreenView";
 
         private Transform _screensHolder;
         private Transform _popupsHolder;
@@ -60,29 +60,6 @@ namespace CombatArena.Game.Services
 
             throw new ArgumentNullException($"Unsupported class - type of: {t}");
         }
-
-        /*public virtual T CreatePopup<T>() where T : Popup
-        {
-            Type t = typeof(T);
-
-            if (t == typeof(SettingsWindow))
-            {
-                var prefabPath = GetCommonPopupPrefabPath(_settingsWindowViewName);
-                var view = InstantiateWindowViewForPopup<SettingsWindowView>(prefabPath);
-
-                return new SettingsWindow(view) as T;
-            }
-
-            if (t == typeof(ConfirmWindow))
-            {
-                var prefabPath = GetCommonPopupPrefabPath(_confirmWindowViewName);
-                var view = InstantiateWindowViewForPopup<ConfirmWindowView>(prefabPath);
-
-                return new ConfirmWindow(view) as T;
-            }
-
-            throw new ArgumentNullException($"Unsupported class - type of: {t}");
-        }*/
 
         private T InstantiateWindowViewForScreen<T>(string prefabPath) where T : WindowView
         {
