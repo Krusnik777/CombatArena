@@ -2,25 +2,12 @@ using R3;
 
 namespace CombatArena.Game.Gameplay.HealthSystem
 {
-    public struct HealthChange
-    {
-        public enum ChangeType
-        {
-            Damage,
-            CriticalDamage,
-            Heal,
-            CriticalHeal
-        }
-
-        public int Value;
-        public ChangeType Type;
-    }
-
     public class Health
     {
         public int MaxValue { get; }
         public Observable<int> Value => _currentValue;
-        public Subject<HealthChange> OnChange { get; }
+        public Subject<Damage> OnDamage { get; } 
+        public Subject<int> OnHeal { get; } 
 
         public string HealthStatus => $"{_currentValue.Value}/{MaxValue}";
 
@@ -37,7 +24,8 @@ namespace CombatArena.Game.Gameplay.HealthSystem
             
             _currentValue = new(MaxValue);
 
-            OnChange = new();
+            OnDamage = new();
+            OnHeal = new();
         }
 
         public void SetIgnoreDamage(bool state) => _ignoreDamage = state;
@@ -53,16 +41,14 @@ namespace CombatArena.Game.Gameplay.HealthSystem
             var value = _currentValue.Value;
             value -= damage.ResultValue;
 
+            OnDamage?.OnNext(damage);
+
             if (value <= 0)
             {
-                InvokeOnChange(_currentValue.Value, damage.IsCritical ? HealthChange.ChangeType.CriticalDamage : HealthChange.ChangeType.Damage);
-
                 _currentValue.Value = 0;
             }
             else
             {
-                InvokeOnChange(damage.ResultValue, damage.IsCritical ? HealthChange.ChangeType.CriticalDamage : HealthChange.ChangeType.Damage);
-
                 _currentValue.Value = value;
             }
         }
@@ -74,25 +60,16 @@ namespace CombatArena.Game.Gameplay.HealthSystem
 
             if (value >= MaxValue)
             {
-                InvokeOnChange(MaxValue - _currentValue.Value, HealthChange.ChangeType.Heal);
+                OnHeal?.OnNext(MaxValue - _currentValue.Value);
 
                 _currentValue.Value = MaxValue;
             }
             else
             {
-                InvokeOnChange(healAmount, HealthChange.ChangeType.Heal);
+                OnHeal?.OnNext(healAmount);
 
                 _currentValue.Value = value;
-            }
-        }
-
-        private void InvokeOnChange(int value, HealthChange.ChangeType changeType)
-        {
-            OnChange.OnNext(new HealthChange
-            {
-                Value = value,
-                Type = changeType
-            });
+            } 
         }
     }
 }

@@ -7,6 +7,7 @@ namespace CombatArena.Game.Gameplay.UI
 {
     public class VictoryScreenView : WindowView
     {
+        [field: SerializeField] public UIControlsTip[] ControlsTips { get; private set; }
         [SerializeField] private Button m_againButton;
         [SerializeField] private Button m_exitButton;
 

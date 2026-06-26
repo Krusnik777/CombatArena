@@ -9,7 +9,7 @@ namespace CombatArena.Game.Gameplay.Entities.Enemies
         public Subject<Enemy> OnEnemySpawned { get; }
 
         private EnemySpawnerView _view;
-        private EnemyFactory _enemyFactory;
+        private EnemyPool _enemyPool;
         private Func<bool> _isSpawnAllowed;
 
         private LayerMask _checkMask;
@@ -18,10 +18,10 @@ namespace CombatArena.Game.Gameplay.Entities.Enemies
 
         private IDisposable _secondsCounterDisposable;
 
-        public EnemySpawner(EnemySpawnerView view, EnemyFactory enemyFactory, Func<bool> isSpawnAllowed = null)
+        public EnemySpawner(EnemySpawnerView view, EnemyPool enemyPool, Func<bool> isSpawnAllowed = null)
         {
             _view = view;
-            _enemyFactory = enemyFactory;
+            _enemyPool = enemyPool;
             _isSpawnAllowed = isSpawnAllowed ?? (() => true);
 
             OnEnemySpawned = new();
@@ -64,7 +64,7 @@ namespace CombatArena.Game.Gameplay.Entities.Enemies
 
             _currentTime = 0;
 
-            var enemy = _enemyFactory.CreateRandomEnemy(_view.SpawnPoint.position);
+            var enemy = _enemyPool.GetRandomEnemy(_view.SpawnPoint.position);
             OnEnemySpawned.OnNext(enemy);
 
             _view.Effect.Play();

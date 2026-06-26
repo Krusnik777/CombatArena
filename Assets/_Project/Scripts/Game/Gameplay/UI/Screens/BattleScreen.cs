@@ -26,6 +26,8 @@ namespace CombatArena.Game.Gameplay.UI
             _concreteView.UIAbilityX.Dispose();
             _concreteView.UIAbilityY.Dispose();
 
+            for (int i = 0; i < _concreteView.ControlsTips.Length; i++) _concreteView.ControlsTips[i].Dispose();
+
             _enemiesRemainedListenerDisposable?.Dispose();
             _detectedEnemyListenerDisposable?.Dispose();
         }
@@ -37,6 +39,8 @@ namespace CombatArena.Game.Gameplay.UI
             _concreteView.UIAbilityA.Bind(player.Abilities.AbilityA);
             _concreteView.UIAbilityX.Bind(player.Abilities.AbilityX);
             _concreteView.UIAbilityY.Bind(player.Abilities.AbilityY);
+
+            for (int i = 0; i < _concreteView.ControlsTips.Length; i++) _concreteView.ControlsTips[i].Initialize();
 
             _enemiesRemainedListenerDisposable = levelController.OnEnemyDied.Subscribe(remainingEnemiesCount =>
             {

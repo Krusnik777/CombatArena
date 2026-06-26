@@ -81,7 +81,15 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: b3edf43dbf1ff22458f09219a4e3db43, type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: m_RayTracingMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: b3edf43dbf1ff22458f09219a4e3db43, type: 3}
+      propertyPath: m_LightProbeUsage
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: b3edf43dbf1ff22458f09219a4e3db43, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: dda4cbcd55b53284597b4fc099cd7dda, type: 2}
     - target: {fileID: 919132149155446097, guid: b3edf43dbf1ff22458f09219a4e3db43, type: 3}

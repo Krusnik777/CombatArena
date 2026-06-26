@@ -1,63 +1,74 @@
 using System;
-using System.Collections.Generic;
+using CombatArena.Game.Gameplay.UI;
 using R3;
 using UnityEngine;
 
 namespace CombatArena.Game.Gameplay.Entities.Player
 {
-    public class PlayerParticles : MonoBehaviour
+    public class PlayerParticles : MonoBehaviour, IDisposable, IEffectsHolder
     {
-        [SerializeField] private Transform m_particlesPoolParent;
-        [SerializeField] private AnimatorEventsCollector m_eventsCollector;
         [Header("Footsteps")]
         [SerializeField] private GameObject m_stepParticlePrefab;
         [SerializeField] private Transform m_leftFootstep;
         [SerializeField] private Transform m_rightFootstep;
-        [Header("Attack")]
+        [Header("Attacks")]
         [SerializeField] private GameObject m_attackParticlePrefab;
         [SerializeField] private GameObject m_earthBreakParticlePrefab;
+        [Header("Health Changes")]
+        [SerializeField] private Transform m_hitTransform;
+        [SerializeField] private UIDamageInfo m_damageInfoPrefab;
+        [SerializeField] private ParticleSystem m_hitEffect;
 
+        public UIDamageInfo UIDamageInfoPrefab => m_damageInfoPrefab;
+        public ParticleSystem HitEffect => m_hitEffect;
+        public Transform HitTransform => m_hitTransform;
+
+        private AnimatorEventsCollector _eventsCollector;
         private SimpleGameObjectsPool _particlesPool;
 
         private CompositeDisposable _disposables;
+
         
-        private void Awake()
+
+        public void Initialize(AnimatorEventsCollector eventsCollector, SimpleGameObjectsPool pool)
         {
             _disposables?.Dispose();
 
-            _particlesPool = new (m_particlesPoolParent, m_stepParticlePrefab, m_attackParticlePrefab, m_earthBreakParticlePrefab);
+            _eventsCollector = eventsCollector;
+            _particlesPool = pool;
+
+            _particlesPool.Add(m_stepParticlePrefab, m_attackParticlePrefab, m_earthBreakParticlePrefab);
 
             _disposables = new()
             {
-                m_eventsCollector.OnFootstep.Subscribe(OnStep),
-                m_eventsCollector.OnAttackStart.Subscribe(OnAttackStart),
-                m_eventsCollector.OnAttackExecute.Subscribe(OnAttackExecute)
+                _eventsCollector.OnFootstep.Subscribe(OnStep),
+                _eventsCollector.OnAttackStart.Subscribe(OnAttackStart),
+                _eventsCollector.OnAttackExecute.Subscribe(OnAttackExecute)
             };
         }
 
-        private void OnDestroy()
+        public void Dispose()
         {
             _disposables?.Dispose();
-            _particlesPool?.Dispose();
         }
 
         private void OnStep(int legIndex)
         {
             var target = legIndex == 0 ? m_leftFootstep : m_rightFootstep;
 
-            var particle = _particlesPool.GetParticle(m_stepParticlePrefab);
+            var particle = _particlesPool.Get(m_stepParticlePrefab);
             particle.transform.position = target.position;
-            _particlesPool.ReturnParticle(particle, 1f);
+            _particlesPool.Return(particle, 1f);
         }
 
         private void OnAttackStart(int attackType)
         {
             if (attackType == 0)
             {
-                var particle = _particlesPool.GetParticle(m_attackParticlePrefab);
+                var particle = _particlesPool.Get(m_attackParticlePrefab);
                 particle.transform.position = transform.position;
                 particle.transform.rotation = transform.localRotation;
-                _particlesPool.ReturnParticle(particle, 2f);
+                _particlesPool.Return(particle, 2f);
             }
         }
 
@@ -65,10 +76,10 @@ namespace CombatArena.Game.Gameplay.Entities.Player
         {
             if (attackType == 1)
             {
-                var particle = _particlesPool.GetParticle(m_earthBreakParticlePrefab);
+                var particle = _particlesPool.Get(m_earthBreakParticlePrefab);
                 particle.transform.position = transform.position;
                 particle.transform.rotation = transform.localRotation;
-                _particlesPool.ReturnParticle(particle, 3f);
+                _particlesPool.Return(particle, 3f);
             }
         }
     }

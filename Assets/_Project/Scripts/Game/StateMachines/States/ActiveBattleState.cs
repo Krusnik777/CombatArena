@@ -35,7 +35,7 @@ namespace CombatArena.Game.StateMachines
             var levelController = _sceneContainer.Resolve<GameplayLevelController>();
             levelController.AssignEnemyDetector(player.EnableEnemyDetector());
             levelController.SetEnterGateEnabled(true);
-            levelController.StartSpawners(_sceneContainer.Resolve<EnemyFactory>(), player.Transform);
+            levelController.StartSpawners(_sceneContainer.Resolve<EnemyPool>(), _sceneContainer.Resolve<SimpleGameObjectsPool>(Root.GameplayTags.ParticlesPool), player.Transform);
 
             // LATER: Play battle music
 

@@ -9,21 +9,18 @@ namespace CombatArena
     {
         private Transform _parentTransform;
 
-        private Dictionary<string, Queue<GameObject>> _simpleParticlesPool;
+        private Dictionary<string, Queue<GameObject>> _simpleGameObjectsPool;
         private Dictionary<int, IDisposable> _returnDisposables;
         private int _returnIndex;
 
         public SimpleGameObjectsPool(Transform parentTransform, params GameObject[] startedObjects)
         {
             _parentTransform = parentTransform;
-            _simpleParticlesPool = new();
+            _simpleGameObjectsPool = new();
             _returnDisposables = new();
             _returnIndex = -1;
 
-            for (int i = 0; i < startedObjects.Length; i++)
-            {
-                CreatePool(startedObjects[i]);
-            }
+            Add(startedObjects);
         }
 
         public void Dispose()
@@ -31,23 +28,19 @@ namespace CombatArena
             foreach (var disposable in _returnDisposables.Values) disposable?.Dispose();
         }
 
-        public GameObject GetParticle(GameObject prefab)
+        public void Add(params GameObject[] prefabs)
         {
-            if (!_simpleParticlesPool.ContainsKey(prefab.name)) CreatePool(prefab);
-
-            var pool = _simpleParticlesPool[prefab.name];
-
-            if (pool.Count == 0)
+            for (int i = 0; i < prefabs.Length; i++)
             {
-                for (int i = 0; i < 10; i++)
-                {
-                    var particle = GameObject.Instantiate(prefab, _parentTransform);
-                    particle.name = prefab.name;
-                    particle.SetActive(false);
-                    pool.Enqueue(particle);
-                }
+                CreatePool(prefabs[i]);
             }
+        }
 
+        public GameObject Get(string gameObjectName)
+        {
+            if (!_simpleGameObjectsPool.ContainsKey(gameObjectName)) throw new NullReferenceException($"Object by name: {gameObjectName}  wasn't initialized as pool");
+
+            var pool = _simpleGameObjectsPool[gameObjectName];
             var obj = pool.Dequeue();
             obj.SetActive(true);
             obj.transform.parent = null;
@@ -55,24 +48,46 @@ namespace CombatArena
             return obj;
         }
 
-        public void ReturnParticle(GameObject gameObject)
+        public GameObject Get(GameObject prefab)
         {
-            if (!_simpleParticlesPool.ContainsKey(gameObject.name))
+            if (!_simpleGameObjectsPool.ContainsKey(prefab.name)) CreatePool(prefab);
+
+            var pool = _simpleGameObjectsPool[prefab.name];
+
+            if (pool.Count == 0)
             {
+                for (int i = 0; i < 10; i++)
+                {
+                    var addedObj = GameObject.Instantiate(prefab, _parentTransform);
+                    addedObj.name = prefab.name;
+                    addedObj.SetActive(false);
+                    pool.Enqueue(addedObj);
+                }
+            }
+
+            return Get(prefab.name);
+        }
+
+        public void Return(GameObject gameObject)
+        {
+            if (!_simpleGameObjectsPool.ContainsKey(gameObject.name))
+            {
+                Debug.LogWarning($"GameObject by name {gameObject.name} wasn't initialized as pool. Destroying instead.");
                 GameObject.Destroy(gameObject);
                 return;
             }
 
             gameObject.SetActive(false);
+            gameObject.transform.position = _parentTransform.position;
             gameObject.transform.SetParent(_parentTransform);
-            _simpleParticlesPool[gameObject.name].Enqueue(gameObject);
+            _simpleGameObjectsPool[gameObject.name].Enqueue(gameObject);
         }
 
-        public void ReturnParticle(GameObject gameObject, float delay)
+        public void Return(GameObject gameObject, float delay)
         {
             if (delay <= 0)
             {
-                ReturnParticle(gameObject);
+                Return(gameObject);
                 return;
             }
 
@@ -85,25 +100,27 @@ namespace CombatArena
                 _returnDisposables[index]?.Dispose();
                 _returnDisposables.Remove(index);
 
-                ReturnParticle(gameObject);
+                Return(gameObject);
             });
 
             _returnDisposables.Add(_returnIndex, disposable);
         }
 
-        private void CreatePool(GameObject prefab)
+        private void CreatePool(GameObject prefab, int amount = 10)
         {
+            if (_simpleGameObjectsPool.ContainsKey(prefab.name)) return;
+
             var newPool = new Queue<GameObject>();
 
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < amount; i++)
             {
-                var particle = GameObject.Instantiate(prefab, _parentTransform);
-                particle.name = prefab.name;
-                particle.SetActive(false);
-                newPool.Enqueue(particle);
+                var obj = GameObject.Instantiate(prefab, _parentTransform);
+                obj.name = prefab.name;
+                obj.SetActive(false);
+                newPool.Enqueue(obj);
             }
 
-            _simpleParticlesPool.Add(prefab.name, newPool);
+            _simpleGameObjectsPool.Add(prefab.name, newPool);
         }
     }
 }

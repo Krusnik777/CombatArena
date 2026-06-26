@@ -29,6 +29,7 @@ namespace CombatArena.Game.Gameplay.UI
             base.Dispose();
 
             _buttonListenerDisposables?.Dispose();
+            for (int i = 0; i < _concreteView.ControlsTips.Length; i++) _concreteView.ControlsTips[i].Dispose();
         }
 
         public override void Show()
@@ -36,6 +37,8 @@ namespace CombatArena.Game.Gameplay.UI
             base.Show();
 
             SubscribeToButtons();
+
+            for (int i = 0; i < _concreteView.ControlsTips.Length; i++) _concreteView.ControlsTips[i].Initialize();
         }
 
         public override void Hide()
@@ -43,6 +46,7 @@ namespace CombatArena.Game.Gameplay.UI
             base.Hide();
 
             _buttonListenerDisposables?.Dispose();
+            for (int i = 0; i < _concreteView.ControlsTips.Length; i++) _concreteView.ControlsTips[i].Dispose();
         }
 
         private void SubscribeToButtons()
@@ -51,14 +55,14 @@ namespace CombatArena.Game.Gameplay.UI
 
             _buttonListenerDisposables = new()
             {
-                _concreteView.OnRestartPress.Subscribe(_ => _onChoseMade.OnNext(GameplayExitTags.RESTART)),
-                _concreteView.OnGiveUpPress.Subscribe(_ => _onChoseMade.OnNext(GameplayExitTags.EXIT))
+                _concreteView.OnRestartPress.Subscribe(_ => _onChoseMade.OnNext(GameplayTags.RESTART)),
+                _concreteView.OnGiveUpPress.Subscribe(_ => _onChoseMade.OnNext(GameplayTags.EXIT))
             };
 
             if (_bindedGameInputService != null)
             {
-                _buttonListenerDisposables.Add(_bindedGameInputService.UIInputController.OnSubmitPressed.Subscribe(_ => _onChoseMade.OnNext(GameplayExitTags.RESTART)));
-                _buttonListenerDisposables.Add(_bindedGameInputService.UIInputController.OnCancelPressed.Subscribe(_ => _onChoseMade.OnNext(GameplayExitTags.EXIT)));
+                _buttonListenerDisposables.Add(_bindedGameInputService.UIInputController.OnSubmitPressed.Subscribe(_ => _onChoseMade.OnNext(GameplayTags.RESTART)));
+                _buttonListenerDisposables.Add(_bindedGameInputService.UIInputController.OnCancelPressed.Subscribe(_ => _onChoseMade.OnNext(GameplayTags.EXIT)));
             }
         }
     }

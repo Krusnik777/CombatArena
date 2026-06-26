@@ -81,9 +81,25 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -5052488503268651223, guid: f6cb445d219616043b39913b7a4c6756, type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: m_RayTracingMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -5052488503268651223, guid: f6cb445d219616043b39913b7a4c6756, type: 3}
+      propertyPath: m_LightProbeUsage
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -5052488503268651223, guid: f6cb445d219616043b39913b7a4c6756, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 528aa7c8feef98142aff34453c773c56, type: 2}
+    - target: {fileID: -3113213771027750667, guid: f6cb445d219616043b39913b7a4c6756, type: 3}
+      propertyPath: m_RayTracingMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -3113213771027750667, guid: f6cb445d219616043b39913b7a4c6756, type: 3}
+      propertyPath: m_LightProbeUsage
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 494204264680786381, guid: f6cb445d219616043b39913b7a4c6756, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.222

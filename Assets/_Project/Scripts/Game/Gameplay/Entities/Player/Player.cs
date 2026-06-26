@@ -2,6 +2,7 @@ using System;
 using CombatArena.Game.Configs;
 using CombatArena.Game.Gameplay.HealthSystem;
 using CombatArena.Game.Services;
+using DI;
 using R3;
 using UnityEngine;
 
@@ -23,6 +24,7 @@ namespace CombatArena.Game.Gameplay.Entities.Player
         private Ability _currentActiveAbility;
         private IDamageDealer _currentDamageDealer;
         private IEnemyDetector _enemyDetector;
+        private HealthChangeVisualController _healthChangeVisualController;
 
         private CompositeDisposable _abilitiesInputListenerDisposable;
 
@@ -30,19 +32,22 @@ namespace CombatArena.Game.Gameplay.Entities.Player
         private IDisposable _healthListenerDisposable;
         private IDisposable _attackFinishListenerDisposable;
 
-        public Player(PlayerView view, PlayerConfigsProvider configsProvider, GameInputService gameInputService)
+        public Player(PlayerView view, DIContainer sceneContainer)
         {
             _view = view;
-            _gameInputService = gameInputService;
+            _gameInputService = sceneContainer.Resolve<GameInputService>();
+            var configsProvider = sceneContainer.Resolve<PlayerConfigsProvider>();
             _healthConfig = configsProvider.HealthConfig;
             _avatarConfig = configsProvider.AvatarConfig;
 
-            _view.Movement.Bind(_avatarConfig, gameInputService);
+            _view.Movement.Bind(_avatarConfig, _gameInputService);
             _view.Animator.Bind(_view.Movement);
             _view.Animator.SetActive(true);
 
             Health = new Health(new DamageProcessor(), _healthConfig.MaxHealth);
             OnDeath = new();
+
+            _healthChangeVisualController = new(sceneContainer.Resolve<SimpleGameObjectsPool>(Root.GameplayTags.ParticlesPool), Health, _view.Particles);
 
             _healthListenerDisposable = Health.Value.Subscribe(OnHealthChange);
             _damageListenerDisposable = _view.Damageable.OnHitted.Subscribe(TakeDamage);
@@ -59,6 +64,7 @@ namespace CombatArena.Game.Gameplay.Entities.Player
             Abilities?.Dispose();
             _currentDamageDealer?.Dispose();
             _enemyDetector?.Dispose();
+            _healthChangeVisualController?.Dispose();
         }
 
         public void AssignAbilities(PlayerAbilities abilitiesBundle)
@@ -90,6 +96,7 @@ namespace CombatArena.Game.Gameplay.Entities.Player
             _abilitiesInputListenerDisposable?.Dispose();
             _attackFinishListenerDisposable?.Dispose();
             _enemyDetector?.Dispose();
+            _healthChangeVisualController?.Dispose();
 
             _view.Movement.SetActive(false);
             _view.Animator.SetActive(false);

@@ -17,6 +17,9 @@ namespace CombatArena.Game.EntryPoints
         [SerializeField] private UISceneRootView m_sceneUIRootPrefab;
         [SerializeField] private GameplayLevelView m_levelView;
         [SerializeField] private PlayerView m_playerView;
+        [Header("Pools Transforms")]
+        [SerializeField] private Transform m_particlesTransform;
+        [SerializeField] private Transform m_enemiesTransform;
 
         private GameplayStateMachine _stateMachine;
 
@@ -25,6 +28,7 @@ namespace CombatArena.Game.EntryPoints
         public override Observable<GameplayExitParameters> Run(DIContainer sceneContainer, GameplayEnterParameters enterParameters)
         {
             _onEnd = new();
+
             RegisterLocalInstances(sceneContainer, enterParameters);
 
             SetupUI(sceneContainer);
@@ -54,21 +58,25 @@ namespace CombatArena.Game.EntryPoints
 
         private void RegisterLocalInstances(DIContainer sceneContainer, GameplayEnterParameters enterParameters)
         {
-            var restartInvoker = new EventInvoker(() => Exit(new(GameplayExitTags.RESTART, enterParameters.Runs)));
-            var nextInvoker = new EventInvoker(() => Exit(new(GameplayExitTags.NEXT, enterParameters.Runs + 1)));
-            var exitInvoker = new EventInvoker(() => Exit(new(GameplayExitTags.EXIT, enterParameters.Runs)));
+            var restartInvoker = new EventInvoker(() => Exit(new(GameplayTags.RESTART, enterParameters.Runs)));
+            var nextInvoker = new EventInvoker(() => Exit(new(GameplayTags.NEXT, enterParameters.Runs + 1)));
+            var exitInvoker = new EventInvoker(() => Exit(new(GameplayTags.EXIT, enterParameters.Runs)));
 
-            sceneContainer.RegisterInstance(GameplayExitTags.RESTART, restartInvoker as IEventInvoker);
-            sceneContainer.RegisterInstance(GameplayExitTags.NEXT, nextInvoker as IEventInvoker);
-            sceneContainer.RegisterInstance(GameplayExitTags.EXIT, exitInvoker as IEventInvoker);
+            sceneContainer.RegisterInstance(GameplayTags.RESTART, restartInvoker as IEventInvoker);
+            sceneContainer.RegisterInstance(GameplayTags.NEXT, nextInvoker as IEventInvoker);
+            sceneContainer.RegisterInstance(GameplayTags.EXIT, exitInvoker as IEventInvoker);
 
             var levelController = new GameplayLevelController(m_levelView, enterParameters.Runs);
             sceneContainer.RegisterInstance(levelController);
 
-            var player = new Player(m_playerView, sceneContainer.Resolve<PlayerConfigsProvider>(), sceneContainer.Resolve<GameInputService>());
+            var particlesPool = new SimpleGameObjectsPool(m_particlesTransform);
+            sceneContainer.RegisterInstance(GameplayTags.ParticlesPool, particlesPool);
+
+            var player = new Player(m_playerView, sceneContainer);
+            m_playerView.Particles.Initialize(m_playerView.EventsCollector, particlesPool);
             sceneContainer.RegisterInstance(player);
 
-            sceneContainer.RegisterFactory(c => new EnemyFactory(c.Resolve<EnemyConfigsProvider>().EnemiesCollection)).AsSingle();
+            sceneContainer.RegisterFactory(c => new EnemyPool(c.Resolve<EnemyConfigsProvider>().EnemiesCollection, m_enemiesTransform)).AsSingle();
         }
 
         private void SetupUI(DIContainer sceneContainer)

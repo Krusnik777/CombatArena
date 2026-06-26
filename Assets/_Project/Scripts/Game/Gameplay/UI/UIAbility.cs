@@ -10,6 +10,7 @@ namespace CombatArena.Game.Gameplay.UI
     {
         [SerializeField] private Image m_icon;
         [SerializeField] private Image m_fillReadyImage;
+        [SerializeField] private GameObject m_tipControl;
 
         protected override TooltipType _tooltipeType => TooltipType.Ability;
 
@@ -29,7 +30,11 @@ namespace CombatArena.Game.Gameplay.UI
 
             _abilityActionsListenerDisposable = new()
             {
-                ability.OnUsed.Subscribe(_ => m_fillReadyImage.fillAmount = 1f),
+                ability.OnUsed.Subscribe(_ =>
+                {
+                    m_fillReadyImage.fillAmount = 1f;
+                    if (m_tipControl != null) m_tipControl.SetActive(false);
+                }),
                 ability.OnExecuted.Subscribe(_ => StartListenAbilityCooldown()),
                 ability.OnCooldownCompleted.Subscribe(_ => StopListenAbilityCooldown())
             };
@@ -68,6 +73,8 @@ namespace CombatArena.Game.Gameplay.UI
 
         private void StartListenAbilityCooldown()
         {
+            _cooldownListenerDisposable?.Dispose();
+            
             _cooldownListenerDisposable = Observable.EveryUpdate().Subscribe(_ =>
             {
                 m_fillReadyImage.fillAmount = 1f - _bindedAbility.CurrentCooldownRate;
@@ -79,6 +86,7 @@ namespace CombatArena.Game.Gameplay.UI
             _cooldownListenerDisposable?.Dispose();
 
             m_fillReadyImage.fillAmount = 0f;
+            if (m_tipControl != null) m_tipControl.SetActive(true);
         }
     }
 }

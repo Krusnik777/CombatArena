@@ -48,7 +48,7 @@ MonoBehaviour:
   <SpawnPoint>k__BackingField: {fileID: 2948942420161926231}
   <SpawnAtStart>k__BackingField: 1
   <SecondsUntilNextSpawn>k__BackingField: 20
-  <AvailableCheckRange>k__BackingField: 5
+  <AvailableCheckRange>k__BackingField: 3.5
   <Effect>k__BackingField: {fileID: 8661363487251562603}
 --- !u!1001 &6432828126254559420
 PrefabInstance:

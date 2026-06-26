@@ -100,6 +100,10 @@ MonoBehaviour:
   <EnemyInfo>k__BackingField: {fileID: 3994393488305141302}
   <EnemyName>k__BackingField: {fileID: 2484551151147395031}
   <UIEnemyHealth>k__BackingField: {fileID: 668677456294496898}
+  <ControlsTips>k__BackingField:
+  - {fileID: 4371363523542256699}
+  - {fileID: 3834376957888648205}
+  - {fileID: 1572880178080597828}
 --- !u!1 &3994393488305141302
 GameObject:
   m_ObjectHideFlags: 0
@@ -703,6 +707,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4811583900084808505}
     m_Modifications:
+    - target: {fileID: 755663256602978666, guid: 01d109c8b36e0024f834bc3cec337471, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 882e0d30ebbb48144abe9124cc3917a8, type: 3}
     - target: {fileID: 873832642989654377, guid: 01d109c8b36e0024f834bc3cec337471, type: 3}
       propertyPath: m_Pivot.x
       value: 1
@@ -769,7 +777,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 873832642989654377, guid: 01d109c8b36e0024f834bc3cec337471, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 34
+      value: 43
       objectReference: {fileID: 0}
     - target: {fileID: 873832642989654377, guid: 01d109c8b36e0024f834bc3cec337471, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -787,6 +795,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: UIAbilityA
       objectReference: {fileID: 0}
+    - target: {fileID: 5621624478502323731, guid: 01d109c8b36e0024f834bc3cec337471, type: 3}
+      propertyPath: m_gamepadButtonImage
+      value: 
+      objectReference: {fileID: 21300000, guid: f69e89d7fd9a06548af4c31a36a22979, type: 3}
+    - target: {fileID: 5621624478502323731, guid: 01d109c8b36e0024f834bc3cec337471, type: 3}
+      propertyPath: m_keyboardButtonImage
+      value: 
+      objectReference: {fileID: 21300000, guid: 882e0d30ebbb48144abe9124cc3917a8, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -803,6 +819,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f9103da189a5dd40a2bd34de511d82b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CombatArena.Game.Gameplay.UI.UIAbility
+--- !u!114 &1572880178080597828 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5621624478502323731, guid: 01d109c8b36e0024f834bc3cec337471, type: 3}
+  m_PrefabInstance: {fileID: 6618034833291133271}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c47de842a707834f9f4484d09bdb9bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CombatArena.Game.Gameplay.UI.UIControlsTip
 --- !u!224 &6338677616076177470 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 873832642989654377, guid: 01d109c8b36e0024f834bc3cec337471, type: 3}
@@ -882,7 +909,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 873832642989654377, guid: 01d109c8b36e0024f834bc3cec337471, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 173
+      value: 182
       objectReference: {fileID: 0}
     - target: {fileID: 873832642989654377, guid: 01d109c8b36e0024f834bc3cec337471, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -916,6 +943,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f9103da189a5dd40a2bd34de511d82b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CombatArena.Game.Gameplay.UI.UIAbility
+--- !u!114 &4371363523542256699 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5621624478502323731, guid: 01d109c8b36e0024f834bc3cec337471, type: 3}
+  m_PrefabInstance: {fileID: 8263602132370033192}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c47de842a707834f9f4484d09bdb9bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CombatArena.Game.Gameplay.UI.UIControlsTip
 --- !u!224 &9119310355893947201 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 873832642989654377, guid: 01d109c8b36e0024f834bc3cec337471, type: 3}
@@ -929,6 +967,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4811583900084808505}
     m_Modifications:
+    - target: {fileID: 755663256602978666, guid: 01d109c8b36e0024f834bc3cec337471, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 6b6fffd667a63a34a88de0cbe8956cb2, type: 3}
     - target: {fileID: 873832642989654377, guid: 01d109c8b36e0024f834bc3cec337471, type: 3}
       propertyPath: m_Pivot.x
       value: 1
@@ -995,7 +1037,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 873832642989654377, guid: 01d109c8b36e0024f834bc3cec337471, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 315
+      value: 324
       objectReference: {fileID: 0}
     - target: {fileID: 873832642989654377, guid: 01d109c8b36e0024f834bc3cec337471, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1013,6 +1055,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: UIAbilityY
       objectReference: {fileID: 0}
+    - target: {fileID: 5621624478502323731, guid: 01d109c8b36e0024f834bc3cec337471, type: 3}
+      propertyPath: m_gamepadButtonImage
+      value: 
+      objectReference: {fileID: 21300000, guid: d7f89167fea6de14592d52647c688c28, type: 3}
+    - target: {fileID: 5621624478502323731, guid: 01d109c8b36e0024f834bc3cec337471, type: 3}
+      propertyPath: m_keyboardButtonImage
+      value: 
+      objectReference: {fileID: 21300000, guid: 6b6fffd667a63a34a88de0cbe8956cb2, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1029,6 +1079,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f9103da189a5dd40a2bd34de511d82b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CombatArena.Game.Gameplay.UI.UIAbility
+--- !u!114 &3834376957888648205 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5621624478502323731, guid: 01d109c8b36e0024f834bc3cec337471, type: 3}
+  m_PrefabInstance: {fileID: 8877285542058840606}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c47de842a707834f9f4484d09bdb9bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CombatArena.Game.Gameplay.UI.UIControlsTip
 --- !u!224 &8579935642361451383 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 873832642989654377, guid: 01d109c8b36e0024f834bc3cec337471, type: 3}

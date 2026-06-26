@@ -13,6 +13,11 @@ namespace CombatArena.Game.Gameplay.Entities.Enemies
         private const string _deathTrigger = "Die";
         private const float _movementThreshold = 0.05f;
 
+        public void ResetControllerState()
+        {
+            m_animator.ResetControllerState();
+        }
+
         public void PlayAttack()
         {
             m_animator.SetTrigger(_attackTrigger);

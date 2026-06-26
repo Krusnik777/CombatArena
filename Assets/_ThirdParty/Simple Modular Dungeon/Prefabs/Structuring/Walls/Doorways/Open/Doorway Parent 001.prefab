@@ -81,7 +81,15 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -5205554923958660608, guid: 8ed09232255eeea44922a6c2c1890312, type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: m_RayTracingMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -5205554923958660608, guid: 8ed09232255eeea44922a6c2c1890312, type: 3}
+      propertyPath: m_LightProbeUsage
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -5205554923958660608, guid: 8ed09232255eeea44922a6c2c1890312, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: bdbe72e7aeebb2944b1937b0db13d6f4, type: 2}
     - target: {fileID: -3337610624244945993, guid: 8ed09232255eeea44922a6c2c1890312, type: 3}
@@ -117,11 +125,19 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -1584499274860967180, guid: 8ed09232255eeea44922a6c2c1890312, type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: m_RayTracingMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -1584499274860967180, guid: 8ed09232255eeea44922a6c2c1890312, type: 3}
+      propertyPath: m_LightProbeUsage
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -1584499274860967180, guid: 8ed09232255eeea44922a6c2c1890312, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: bdbe72e7aeebb2944b1937b0db13d6f4, type: 2}
     - target: {fileID: -1584499274860967180, guid: 8ed09232255eeea44922a6c2c1890312, type: 3}
-      propertyPath: m_Materials.Array.data[1]
+      propertyPath: 'm_Materials.Array.data[1]'
       value: 
       objectReference: {fileID: 2100000, guid: bdbe72e7aeebb2944b1937b0db13d6f4, type: 2}
     - target: {fileID: 919132149155446097, guid: 8ed09232255eeea44922a6c2c1890312, type: 3}

@@ -93,21 +93,21 @@ namespace CombatArena.Game.Root
             var sceneContainer = _cachedSceneContainer = new DIContainer(_rootContainer);
             sceneEntryPoint.Run(sceneContainer, enterParams).Subscribe(exitParameters =>
             {
-                if (exitParameters.ExitTag == GameplayExitTags.RESTART)
+                if (exitParameters.ExitTag == GameplayTags.RESTART)
                 {
                     LoadAndStartGameplay(new GameplayEnterParameters(exitParameters.Runs));
 
                     return;
                 }
 
-                if (exitParameters.ExitTag == GameplayExitTags.NEXT)
+                if (exitParameters.ExitTag == GameplayTags.NEXT)
                 {
                     LoadAndStartGameplay(new GameplayEnterParameters(exitParameters.Runs));
 
                     return;
                 }
 
-                if (exitParameters.ExitTag == GameplayExitTags.EXIT)
+                if (exitParameters.ExitTag == GameplayTags.EXIT)
                 {
                     #if UNITY_EDITOR
                     LoadAndStartGameplay(new GameplayEnterParameters(0));

@@ -21,6 +21,7 @@ namespace CombatArena.Game.Gameplay.Entities.Levels
         private ReactiveProperty<Enemy> _detectedEnemyByPlayer;
 
         private Dictionary<Enemy, (IDisposable, IDisposable)> _spawnedEnemiesMap;
+        private EnemyPool _enemyPool;
         
         private CompositeDisposable _spawnerDisposables;
         private IDisposable _enemyDetectionListenerDisposable;
@@ -80,20 +81,23 @@ namespace CombatArena.Game.Gameplay.Entities.Levels
             _view.EnterGate.SetActive(state);
         }
 
-        public void StartSpawners(EnemyFactory enemyFactory, Transform pursueTarget)
+        public void StartSpawners(EnemyPool enemyPool, SimpleGameObjectsPool particlesPool, Transform pursueTarget)
         {
             _spawnerDisposables?.Dispose();
+            _enemyPool?.Dispose();
 
             _spawnerDisposables = new();
             _spawnedEnemiesMap = new();
+            _enemyPool = enemyPool;
 
             for (int i = 0; i < _view.EnemySpawnerViews.Length; i++)
             {
-                var spawner = new EnemySpawner(_view.EnemySpawnerViews[i], enemyFactory, IsSpawnAllowed);
+                var spawner = new EnemySpawner(_view.EnemySpawnerViews[i], enemyPool, IsSpawnAllowed);
                 _spawnerDisposables.Add(spawner);
                 _spawnerDisposables.Add(spawner.OnEnemySpawned.Subscribe(enemy =>
                 {
                     enemy.AssignPursueTarget(pursueTarget);
+                    enemy.ActivateParticles(particlesPool);
                     
                     _spawnedEnemiesMap.Add(enemy, (enemy.OnDeath.Subscribe(OnEnemyDead), enemy.OnDeleted.Subscribe(OnEnemyDeleted)));
 
@@ -129,6 +133,8 @@ namespace CombatArena.Game.Gameplay.Entities.Levels
         private void OnEnemyDeleted(Enemy enemy)
         {
             if (!_spawnedEnemiesMap.ContainsKey(enemy)) return;
+
+            _enemyPool.Return(enemy);
 
             _spawnedEnemiesMap[enemy].Item2.Dispose();
             _spawnedEnemiesMap.Remove(enemy);

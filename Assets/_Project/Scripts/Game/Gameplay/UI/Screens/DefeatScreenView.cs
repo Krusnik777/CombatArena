@@ -7,6 +7,7 @@ namespace CombatArena.Game.Gameplay.UI
 {
     public class DefeatScreenView : WindowView
     {
+        [field: SerializeField] public UIControlsTip[] ControlsTips { get; private set; }
         [SerializeField] private Button m_restartButton;
         [SerializeField] private Button m_giveUpButton;
 

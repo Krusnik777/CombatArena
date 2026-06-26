@@ -22,6 +22,7 @@ namespace CombatArena.Game.Gameplay.Entities.Enemies
         private AttackAbility _attackAbility;
         private TargetPursuer _currentPursuer;
         private IDamageDealer _currentDamageDealer;
+        private HealthChangeVisualController _healthChangeVisualController;
 
         private IDisposable _damageListenerDisposable;
         private IDisposable _healthListenerDisposable;
@@ -60,6 +61,15 @@ namespace CombatArena.Game.Gameplay.Entities.Enemies
             _currentPursuer.StartPursue();
         }
 
+        public void ActivateParticles(SimpleGameObjectsPool particlesPool)
+        {
+            if (_view.Particles == null) return;
+
+            _healthChangeVisualController?.Dispose();
+
+            _healthChangeVisualController = new(particlesPool, Health, _view.Particles);
+        }
+
         public void Stop()
         {
             _deathDisposable?.Dispose();
@@ -78,6 +88,7 @@ namespace CombatArena.Game.Gameplay.Entities.Enemies
             _attackAbility?.Dispose();
             _currentPursuer?.Dispose();
             _currentDamageDealer?.Dispose();
+            _healthChangeVisualController?.Dispose();
         }
 
         public Observable<bool> Attack(AttackAbilityConfig config)
