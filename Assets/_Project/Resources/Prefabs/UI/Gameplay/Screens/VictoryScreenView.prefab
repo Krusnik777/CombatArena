@@ -368,8 +368,8 @@ MonoBehaviour:
   <ControlsTips>k__BackingField:
   - {fileID: 1924224051001544451}
   - {fileID: 5468039809839840585}
-  m_againButton: {fileID: 4069041642191961618}
-  m_exitButton: {fileID: 5693345681312044958}
+  m_acceptButton: {fileID: 4069041642191961618}
+  m_declineButton: {fileID: 5693345681312044958}
 --- !u!1 &1613332355695452603
 GameObject:
   m_ObjectHideFlags: 0

@@ -111,6 +111,13 @@ namespace CombatArena.Game.Gameplay.Entities.Enemies
             _healthChangeVisualController?.Dispose();
         }
 
+        public void Kill()
+        {
+            Stop();
+            _view.Animator.PlayDeath();
+            _sounds.Play(_config.DeathSound);
+        }
+
         public Observable<bool> Attack(AttackAbilityConfig config)
         {
             var finishedAttack = new Subject<bool>();
@@ -149,9 +156,7 @@ namespace CombatArena.Game.Gameplay.Entities.Enemies
         {
             if (currentValue <= 0)
             {
-                Stop();
-                _view.Animator.PlayDeath();
-                _sounds.Play(_config.DeathSound);
+                Kill();
 
                 _deathDisposable = Observable.Interval(TimeSpan.FromSeconds(3f)).Subscribe(_ =>
                 {

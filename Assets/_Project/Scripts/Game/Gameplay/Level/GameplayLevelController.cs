@@ -120,7 +120,7 @@ namespace CombatArena.Game.Gameplay.Entities.Levels
             }
         }
 
-        public void StopSpawnersAndEnemies()
+        public void StopSpawnersAndEnemies(bool killRemainingEnemies)
         {
             _spawnerDisposables?.Dispose();
             _enemyDetectionListenerDisposable?.Dispose();
@@ -128,7 +128,9 @@ namespace CombatArena.Game.Gameplay.Entities.Levels
             foreach (var enemy in _spawnedEnemiesMap)
             {
                 enemy.Key.CleanupHitNumbers();
-                enemy.Key.Stop();
+                
+                if (killRemainingEnemies) enemy.Key.Kill();
+                else enemy.Key.Stop();
 
                 enemy.Value.Item1?.Dispose();
                 enemy.Value.Item2?.Dispose();

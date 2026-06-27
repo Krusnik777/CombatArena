@@ -27,7 +27,7 @@ namespace CombatArena.Game.StateMachines
         public void Enter()
         {
             var player = _sceneContainer.Resolve<Player>();
-            player.AssignAbilities(_sceneContainer.Resolve<PlayerAbilities>());
+            player.ActivateBattleState(_sceneContainer.Resolve<PlayerAbilities>());
 
             var levelController = _sceneContainer.Resolve<GameplayLevelController>();
             levelController.AssignEnemyDetector(player.EnableEnemyDetector());

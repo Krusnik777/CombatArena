@@ -9,6 +9,8 @@ namespace CombatArena.Game.Gameplay.Entities
         public Subject<int> OnAttackStart { get; private set;} = new();
         public Subject<int> OnAttackExecute { get; private set;} = new();
         public Subject<int> OnAttackFinish { get; private set;} = new();
+        public Subject<Unit> OnEquipWeapon { get; private set;} = new();
+        public Subject<Unit> OnDisarmWeapon { get; private set;} = new();
 
         public void OnStep(int legIndex)
         {
@@ -28,6 +30,16 @@ namespace CombatArena.Game.Gameplay.Entities
         public void OnAttackFinished(int attackType)
         {
             OnAttackFinish?.OnNext(attackType);
+        }
+
+        public void OnEquip()
+        {
+            OnEquipWeapon?.OnNext(Unit.Default);
+        }
+
+        public void OnDisarm()
+        {
+            OnDisarmWeapon?.OnNext(Unit.Default);
         }
     }
 }

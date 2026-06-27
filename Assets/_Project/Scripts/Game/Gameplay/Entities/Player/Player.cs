@@ -29,6 +29,7 @@ namespace CombatArena.Game.Gameplay.Entities.Player
         private HealthChangeVisualController _healthChangeVisualController;
 
         private IDisposable _attackFinishListenerDisposable;
+        private IDisposable _equipListenerDisposable;
 
         private CompositeDisposable _abilitiesInputListenerDisposables;
         private CompositeDisposable _changesListenerDisposables;
@@ -43,8 +44,13 @@ namespace CombatArena.Game.Gameplay.Entities.Player
             _avatarConfig = configsProvider.AvatarConfig;
 
             _view.Movement.Bind(_avatarConfig, _gameInputService);
+
+            _view.ShealteredSwordTransform.gameObject.SetActive(true);
+            _view.SwordTransform.gameObject.SetActive(false);
+
+            _view.Animator.SetAsCalm();
             _view.Animator.Bind(_view.Movement);
-            _view.Animator.SetActive(true);
+            _view.Animator.SetMovementAnimationActive(true);
 
             Health = new Health(new DamageProcessor(), _healthConfig.MaxHealth);
             OnDeath = new();
@@ -73,19 +79,37 @@ namespace CombatArena.Game.Gameplay.Entities.Player
             _view.Particles.Dispose();
         }
 
-        public void AssignAbilities(PlayerAbilities abilitiesBundle)
+        public void ActivateBattleState(PlayerAbilities abilitiesBundle)
         {
             Abilities = abilitiesBundle;
             _currentActiveAbility = null;
 
             _abilitiesInputListenerDisposables?.Dispose();
+            _equipListenerDisposable?.Dispose();
 
-            _abilitiesInputListenerDisposables = new()
+            _equipListenerDisposable = _view.EventsCollector.OnEquipWeapon.Subscribe(_ =>
             {
-                _gameInputService.OnAbilityAPressed.Subscribe(_ => HandleAbilityAUse()),
-                _gameInputService.OnAbilityXPressed.Subscribe(_ => HandleAbilityXUse()),
-                _gameInputService.OnAbilityYPressed.Subscribe(_ => HandleAbilityYUse())
-            };
+                _equipListenerDisposable?.Dispose();
+
+                _view.ShealteredSwordTransform.gameObject.SetActive(false);
+                _view.SwordTransform.gameObject.SetActive(true);
+            });
+
+            _view.Movement.SetActive(false);
+            _view.Animator.SetMovementAnimationActive(false);
+
+            _view.Animator.PlayEquip(() =>
+            {
+                _view.Animator.SetMovementAnimationActive(true);
+                _view.Movement.SetActive(true);
+
+                _abilitiesInputListenerDisposables = new()
+                {
+                    _gameInputService.OnAbilityAPressed.Subscribe(_ => HandleAbilityAUse()),
+                    _gameInputService.OnAbilityXPressed.Subscribe(_ => HandleAbilityXUse()),
+                    _gameInputService.OnAbilityYPressed.Subscribe(_ => HandleAbilityYUse())
+                };
+            });
         }
 
         public IEnemyDetector EnableEnemyDetector()
@@ -106,8 +130,23 @@ namespace CombatArena.Game.Gameplay.Entities.Player
             _healthChangeVisualController?.Dispose();
 
             _view.Movement.SetActive(false);
-            _view.Animator.SetActive(false);
+            _view.Animator.SetMovementAnimationActive(false);
             _view.Particles.Dispose();
+        }
+
+        public void ActivateVictoryState()
+        {
+            _equipListenerDisposable?.Dispose();
+
+            _equipListenerDisposable = _view.EventsCollector.OnDisarmWeapon.Subscribe(_ =>
+            {
+                _equipListenerDisposable?.Dispose();
+
+                _view.ShealteredSwordTransform.gameObject.SetActive(true);
+                _view.SwordTransform.gameObject.SetActive(false);
+            });
+
+            _view.Animator.PlayWin();
         }
 
         public Observable<bool> Attack(AttackAbilityConfig config)
@@ -149,8 +188,6 @@ namespace CombatArena.Game.Gameplay.Entities.Player
 
                 _view.Animator.PlaySuperAttack();
             }
-
-
 
             return finishedAttack;
         }

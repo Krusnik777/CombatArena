@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace CombatArena.Game.Gameplay.Entities.Player
@@ -8,9 +9,14 @@ namespace CombatArena.Game.Gameplay.Entities.Player
         [SerializeField] private Animator m_animator;
 
         private const string _isMovingBool = "IsMoving";
+
         private const string _simpleAttackTrigger = "SimpleAttack";
         private const string _superAttackTrigger = "SuperAttack";
         private const string _deathTrigger = "Die";
+        private const string _equipTrigger = "Equip";
+        private const string _calmTrigger = "Calm";
+        private const string _winTrigger = "Win";
+
         private const float _movementThreshold = 0.05f;
 
         private PlayerAvatarMovement _movement;
@@ -21,7 +27,7 @@ namespace CombatArena.Game.Gameplay.Entities.Player
             _movement = movement;
         }
 
-        public void SetActive(bool state) => _isActive = state;
+        public void SetMovementAnimationActive(bool state) => _isActive = state;
 
         private void Update()
         {
@@ -48,6 +54,30 @@ namespace CombatArena.Game.Gameplay.Entities.Player
         public void PlayDeath()
         {
             m_animator.SetTrigger(_deathTrigger);
+        }
+
+        public void PlayWin()
+        {
+            m_animator.SetTrigger(_winTrigger);
+        }
+
+        public void SetAsCalm()
+        {
+            m_animator.SetTrigger(_calmTrigger);
+        }
+
+        public void PlayEquip(System.Action onEnd)
+        {
+            m_animator.SetTrigger(_equipTrigger);
+
+            StartCoroutine(EndEquipAnimationRoutine(onEnd));
+        }
+
+        private IEnumerator EndEquipAnimationRoutine(System.Action onEnd)
+        {
+            yield return new WaitForSeconds(1.5f);
+
+            onEnd?.Invoke();
         }
     }
 }

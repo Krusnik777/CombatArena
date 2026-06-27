@@ -25,10 +25,11 @@ namespace CombatArena.Game.StateMachines
         public void Enter(bool isVictory)
         {
             var levelController = _sceneContainer.Resolve<GameplayLevelController>();
-            levelController.StopSpawnersAndEnemies();
+            levelController.StopSpawnersAndEnemies(isVictory);
 
             var player = _sceneContainer.Resolve<Player>();
             player.Stop();
+            if (isVictory) player.ActivateVictoryState();
 
             var gameInputService = _sceneContainer.Resolve<GameInputService>();
             var windowsProvider = _sceneContainer.Resolve<UIWindowsProvider>();
