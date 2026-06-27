@@ -16,6 +16,7 @@ namespace CombatArena.Game.Gameplay.HealthSystem
         private ReactiveProperty<int> _currentValue;
 
         private bool _ignoreDamage;
+        public bool IsDamageIgnored => _ignoreDamage;
 
         public Health(IDamageProcessor damageProcessor, int maxValue)
         {

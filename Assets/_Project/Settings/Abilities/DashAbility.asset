@@ -16,7 +16,7 @@ MonoBehaviour:
   <Name>k__BackingField: Dash
   <Description>k__BackingField: Move Forward with Wind
   <Icon>k__BackingField: {fileID: 21300000, guid: 0cd935a1d20133c4b8613b8a30959089, type: 3}
-  <Cooldown>k__BackingField: 1.5
-  <DashDistance>k__BackingField: 8
-  <DashSteps>k__BackingField: 16
+  <Cooldown>k__BackingField: 1.25
+  <DashDistance>k__BackingField: 10
+  <DashSteps>k__BackingField: 50
   <DashSpeedMultiplier>k__BackingField: 0.5

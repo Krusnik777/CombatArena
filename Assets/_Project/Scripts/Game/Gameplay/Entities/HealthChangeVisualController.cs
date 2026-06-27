@@ -4,7 +4,6 @@ using System.Linq;
 using CombatArena.Game.Gameplay.HealthSystem;
 using CombatArena.Game.Gameplay.UI;
 using R3;
-using UnityEngine;
 
 namespace CombatArena.Game.Gameplay.Entities
 {

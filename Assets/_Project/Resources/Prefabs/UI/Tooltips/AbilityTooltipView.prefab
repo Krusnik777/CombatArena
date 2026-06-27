@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5312568988720981577}
   - component: {fileID: 5746395080602981690}
   - component: {fileID: 6308889343341478904}
+  - component: {fileID: 7033881469830350664}
   m_Layer: 0
   m_Name: AbilityTooltipView
   m_TagString: Untagged
@@ -91,9 +92,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5f52d02a27ea3840b8caf8bb90e4175, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UI.Tooltips.TooltipView
+  m_canvasGroup: {fileID: 7033881469830350664}
   m_title: {fileID: 8191911132921498685}
   m_description: {fileID: 5596815364096533726}
   m_info: {fileID: 9155201961861272769}
+--- !u!225 &7033881469830350664
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 588571049657924675}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1263293664516846773
 GameObject:
   m_ObjectHideFlags: 0

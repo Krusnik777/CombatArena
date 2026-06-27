@@ -1,4 +1,5 @@
 using CombatArena.Game.Gameplay.Entities.Levels;
+using CombatArena.Game.Gameplay.Entities.Player;
 using CombatArena.Game.Gameplay.UI;
 using CombatArena.Game.Services;
 using DI;
@@ -22,13 +23,19 @@ namespace CombatArena.Game.StateMachines
 
         public void Enter()
         {
+            var player = _sceneContainer.Resolve<Player>();
+            player.SetActive(false);
+            
             var levelController = _sceneContainer.Resolve<GameplayLevelController>();
             levelController.SetEnterGateEnabled(false);
+
+            _sceneContainer.Resolve<PlayerCamera>().SetEventsView();
 
             // LATER: SetPlayer As Not battle ready
             _sceneContainer.Resolve<AudioService>().Music.Play(false);
 
-            _sceneContainer.Resolve<UIWindowsProvider>().ShowScreen<BeforeBattleScreen>();
+            var window = _sceneContainer.Resolve<UIWindowsProvider>().ShowScreen<BeforeBattleScreen>();
+            window.DoFadeIn(2f, () => player.SetActive(true));
 
             _disposable = levelController.OnPlayerEnteredToArena().Subscribe(_ =>
             {

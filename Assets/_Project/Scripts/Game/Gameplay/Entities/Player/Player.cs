@@ -44,13 +44,14 @@ namespace CombatArena.Game.Gameplay.Entities.Player
             _avatarConfig = configsProvider.AvatarConfig;
 
             _view.Movement.Bind(_avatarConfig, _gameInputService);
+            _view.Movement.SetActive(false);
 
             _view.ShealteredSwordTransform.gameObject.SetActive(true);
             _view.SwordTransform.gameObject.SetActive(false);
 
             _view.Animator.SetAsCalm();
             _view.Animator.Bind(_view.Movement);
-            _view.Animator.SetMovementAnimationActive(true);
+            _view.Animator.SetMovementAnimationActive(false);
 
             Health = new Health(new DamageProcessor(), _healthConfig.MaxHealth);
             OnDeath = new();
@@ -79,6 +80,12 @@ namespace CombatArena.Game.Gameplay.Entities.Player
             _view.Particles.Dispose();
         }
 
+        public void SetActive(bool state)
+        {
+            _view.Movement.SetActive(state);
+            _view.Animator.SetMovementAnimationActive(state);
+        }
+
         public void ActivateBattleState(PlayerAbilities abilitiesBundle)
         {
             Abilities = abilitiesBundle;
@@ -95,13 +102,11 @@ namespace CombatArena.Game.Gameplay.Entities.Player
                 _view.SwordTransform.gameObject.SetActive(true);
             });
 
-            _view.Movement.SetActive(false);
-            _view.Animator.SetMovementAnimationActive(false);
+            SetActive(false);
 
             _view.Animator.PlayEquip(() =>
             {
-                _view.Animator.SetMovementAnimationActive(true);
-                _view.Movement.SetActive(true);
+                SetActive(true);
 
                 _abilitiesInputListenerDisposables = new()
                 {
@@ -253,7 +258,7 @@ namespace CombatArena.Game.Gameplay.Entities.Player
 
             Health.TakeDamage(damage);
 
-            _sounds.Play(PlayerSounds.Damage);
+            if (!Health.IsDamageIgnored) _sounds.Play(PlayerSounds.Damage);
         }
 
         private void OnStep(int legIndex)

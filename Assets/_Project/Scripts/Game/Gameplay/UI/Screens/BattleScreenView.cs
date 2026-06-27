@@ -15,5 +15,6 @@ namespace CombatArena.Game.Gameplay.UI
         [field: SerializeField] public TMP_Text EnemyName { get; private set; }
         [field: SerializeField] public UIHealth UIEnemyHealth { get; private set; }
         [field: SerializeField] public UIControlsTip[] ControlsTips { get; private set; }
+        [field: SerializeField] public CanvasGroup CanvasGroup { get; private set; }
     }
 }

@@ -1,4 +1,5 @@
 using R3;
+using TMPro;
 using UI.Windows;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,6 +8,9 @@ namespace CombatArena.Game.Gameplay.UI
 {
     public abstract class ResultScreenView : WindowView
     {
+        [field: SerializeField] public TMP_Text Title { get; private set; }
+        [field: SerializeField] public TMP_Text Message { get; private set; }
+        [field: SerializeField] public GameObject ButtonsContainer { get; private set;}
         [field: SerializeField] public UIControlsTip[] ControlsTips { get; private set; }
         [SerializeField] private Button m_acceptButton;
         [SerializeField] private Button m_declineButton;

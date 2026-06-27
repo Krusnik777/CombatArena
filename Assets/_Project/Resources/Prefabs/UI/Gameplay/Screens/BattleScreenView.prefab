@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2242017120104925739}
   - component: {fileID: 7649326750563287165}
   - component: {fileID: 3182221106923991296}
+  - component: {fileID: 5257797912570694529}
   m_Layer: 0
   m_Name: BattleScreenView
   m_TagString: Untagged
@@ -104,6 +105,19 @@ MonoBehaviour:
   - {fileID: 4371363523542256699}
   - {fileID: 3834376957888648205}
   - {fileID: 1572880178080597828}
+  <CanvasGroup>k__BackingField: {fileID: 5257797912570694529}
+--- !u!225 &5257797912570694529
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1422661862232973206}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &3994393488305141302
 GameObject:
   m_ObjectHideFlags: 0
@@ -246,8 +260,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Enemies Remaining:9999
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: b105dd089ae03c744b6ee71ea2598d88, type: 2}
+  m_sharedMaterial: {fileID: -4811894464601666101, guid: b105dd089ae03c744b6ee71ea2598d88, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -271,12 +285,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 60
+  m_fontSize: 70
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 1
-  m_fontSizeMax: 60
+  m_fontSizeMax: 70
   m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
@@ -383,8 +397,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Enemy Name
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: b105dd089ae03c744b6ee71ea2598d88, type: 2}
+  m_sharedMaterial: {fileID: -4811894464601666101, guid: b105dd089ae03c744b6ee71ea2598d88, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -408,12 +422,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 40
+  m_fontSize: 49.8
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 1
-  m_fontSizeMax: 40
+  m_fontSizeMax: 55
   m_fontStyle: 3
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 512

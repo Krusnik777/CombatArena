@@ -31,6 +31,8 @@ namespace CombatArena.Game.StateMachines
             player.Stop();
             if (isVictory) player.ActivateVictoryState();
 
+            _sceneContainer.Resolve<PlayerCamera>().SetEventsView();
+
             var gameInputService = _sceneContainer.Resolve<GameInputService>();
             var windowsProvider = _sceneContainer.Resolve<UIWindowsProvider>();
             var audioService = _sceneContainer.Resolve<AudioService>();

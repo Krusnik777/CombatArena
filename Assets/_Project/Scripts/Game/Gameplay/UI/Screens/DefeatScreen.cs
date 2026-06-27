@@ -13,8 +13,6 @@ namespace CombatArena.Game.Gameplay.UI
         {
             _buttonListenerDisposables?.Dispose();
 
-            UnityEngine.Debug.Log("DEFEAT - " + GetType());
-
             _buttonListenerDisposables = new()
             {
                 _concreteView.OnAcceptPress.Subscribe(_ => _onChoseMade.OnNext(GameplayTags.RESTART)),

@@ -34,6 +34,7 @@ namespace CombatArena.Game.StateMachines
             levelController.SetEnterGateEnabled(true);
             levelController.StartSpawners(player.Transform);
 
+            _sceneContainer.Resolve<PlayerCamera>().SetDefaultView(2f);
             _sceneContainer.Resolve<AudioService>().Music.Play(true);
 
             var screen = _sceneContainer.Resolve<UIWindowsProvider>().ShowScreen<BattleScreen>();

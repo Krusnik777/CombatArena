@@ -17,6 +17,7 @@ namespace CombatArena.Game.EntryPoints
         [SerializeField] private UISceneRootView m_sceneUIRootPrefab;
         [SerializeField] private GameplayLevelView m_levelView;
         [SerializeField] private PlayerView m_playerView;
+        [SerializeField] private PlayerCamera m_playerCamera;
         [Header("Pools Transforms")]
         [SerializeField] private Transform m_particlesTransform;
         [SerializeField] private Transform m_enemiesTransform;
@@ -30,7 +31,6 @@ namespace CombatArena.Game.EntryPoints
             _onEnd = new();
 
             RegisterLocalInstances(sceneContainer, enterParameters);
-
             SetupUI(sceneContainer);
 
             _stateMachine = new GameplayStateMachine(sceneContainer);
@@ -81,6 +81,8 @@ namespace CombatArena.Game.EntryPoints
             var playerAbilitiesFactory = new Gameplay.PlayerAbilitiesFactory(abilitiesProvider.AbilitiesCollection);
             var playerAbilities = playerAbilitiesFactory.Create(player);
             sceneContainer.RegisterInstance(playerAbilities);
+
+            sceneContainer.RegisterInstance(m_playerCamera);
         }
 
         private void SetupUI(DIContainer sceneContainer)

@@ -48,7 +48,7 @@ namespace CombatArena.Game.Services
             _activeTooltip.rectTransform.pivot = Vector2.zero;
 
             _activeTooltip.view.Setup(data);
-            _activeTooltip.view.gameObject.SetActive(true);
+            _activeTooltip.view.Show();
 
             _showDisposable = Observable.EveryUpdate().Subscribe(_ => UpdatePosition());
         }
@@ -59,7 +59,7 @@ namespace CombatArena.Game.Services
 
             _showDisposable?.Dispose();
 
-            _activeTooltip.view.gameObject.SetActive(false);
+            _activeTooltip.view.Hide();
             _activeTooltip = null;
         }
 

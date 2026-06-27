@@ -3,6 +3,7 @@ using CombatArena.Game.Gameplay.Entities.Player;
 using R3;
 using Screen = UI.Windows.Screen;
 using ITooltipHandler = UI.Tooltips.ITooltipHandler;
+using DG.Tweening;
 
 namespace CombatArena.Game.Gameplay.UI
 {
@@ -30,6 +31,18 @@ namespace CombatArena.Game.Gameplay.UI
 
             _enemiesRemainedListenerDisposable?.Dispose();
             _detectedEnemyListenerDisposable?.Dispose();
+        }
+
+        public override void Show()
+        {
+            base.Show();
+
+            _concreteView.CanvasGroup.alpha = 0f;
+
+            var anim = DOTween.Sequence();
+            anim.AppendInterval(1.5f);
+            anim.Append(_concreteView.CanvasGroup.DOFade(1f, 0.25f).SetEase(Ease.InSine));
+            anim.SetLink(_concreteView.gameObject);
         }
 
         public void Initialize(Player player, GameplayLevelController levelController)

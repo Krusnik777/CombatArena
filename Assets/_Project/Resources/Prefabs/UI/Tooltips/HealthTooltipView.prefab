@@ -301,6 +301,7 @@ GameObject:
   - component: {fileID: 7073372824124440764}
   - component: {fileID: 7218401189707789263}
   - component: {fileID: 8943602595511100685}
+  - component: {fileID: 482386451209126080}
   m_Layer: 0
   m_Name: HealthTooltipView
   m_TagString: Untagged
@@ -379,9 +380,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5f52d02a27ea3840b8caf8bb90e4175, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UI.Tooltips.TooltipView
+  m_canvasGroup: {fileID: 482386451209126080}
   m_title: {fileID: 6502108828907350728}
   m_description: {fileID: 7365711587094725163}
   m_info: {fileID: 0}
+--- !u!225 &482386451209126080
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2573987516535200438}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &4187147705629905472
 GameObject:
   m_ObjectHideFlags: 0
