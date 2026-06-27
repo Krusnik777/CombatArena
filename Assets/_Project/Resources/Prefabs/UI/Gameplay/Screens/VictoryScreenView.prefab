@@ -371,7 +371,7 @@ MonoBehaviour:
   <ButtonsContainer>k__BackingField: {fileID: 8642492372431169746}
   <ControlsTips>k__BackingField:
   - {fileID: 562295307613779162}
-  - {fileID: 562295307613779162}
+  - {fileID: 1534340403238166696}
   m_acceptButton: {fileID: 4844648450647976080}
   m_declineButton: {fileID: 8354577016533389773}
 --- !u!225 &2787724554519307819
