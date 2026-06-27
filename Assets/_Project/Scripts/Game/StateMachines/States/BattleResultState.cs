@@ -29,14 +29,15 @@ namespace CombatArena.Game.StateMachines
 
             var player = _sceneContainer.Resolve<Player>();
             player.Stop();
-            
-            // LATER: Play victory music or fail music
 
             var gameInputService = _sceneContainer.Resolve<GameInputService>();
             var windowsProvider = _sceneContainer.Resolve<UIWindowsProvider>();
+            var audioService = _sceneContainer.Resolve<AudioService>();
 
             if (isVictory)
             {
+                audioService.Music.Play(false);
+
                 var window = windowsProvider.ShowScreen<VictoryScreen>();
                 window.Bind(gameInputService);
 
@@ -48,6 +49,9 @@ namespace CombatArena.Game.StateMachines
             }
             else
             {
+                audioService.Music.Stop();
+                audioService.Sounds.Play(Root.Sounds.PlayerSounds.Defeat);
+
                 var window = windowsProvider.ShowScreen<DefeatScreen>();
                 window.Bind(gameInputService);
 
@@ -61,6 +65,8 @@ namespace CombatArena.Game.StateMachines
 
         public void Exit()
         {
+            _sceneContainer.Resolve<AudioService>().Music.Stop();
+
             _disposable?.Dispose();
         }
     }

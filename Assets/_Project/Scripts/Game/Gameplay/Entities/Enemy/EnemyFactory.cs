@@ -1,4 +1,5 @@
 using CombatArena.Game.Configs;
+using CombatArena.Game.Services;
 using UnityEngine;
 
 namespace CombatArena.Game.Gameplay.Entities.Enemies
@@ -6,10 +7,12 @@ namespace CombatArena.Game.Gameplay.Entities.Enemies
     public class EnemyFactory
     {
         private EnemiesCollection _enemiesCollection;
+        private SoundService _soundService;
 
-        public EnemyFactory(EnemiesCollection enemiesCollection)
+        public EnemyFactory(EnemiesCollection enemiesCollection, SoundService soundService)
         {
             _enemiesCollection = enemiesCollection;
+            _soundService = soundService;
         }
 
         public Enemy CreateRandomEnemy(Vector3 position)
@@ -38,7 +41,7 @@ namespace CombatArena.Game.Gameplay.Entities.Enemies
                     $"[Enemy Factory] Couldn't find prefab by name {enemyConfig.PrefabName} in path {_enemiesCollection.PrefabsPath} for config id {enemyConfig.ID}");
 
             var enemyView = GameObject.Instantiate(enemyViewPrefab, position, Quaternion.identity);
-            var enemy = new Enemy(enemyConfig, enemyView);
+            var enemy = new Enemy(enemyConfig, enemyView, _soundService);
 
             return enemy;
         }

@@ -1,3 +1,4 @@
+using CombatArena.Game.Root.Sounds;
 using UnityEngine;
 
 namespace CombatArena.Game.Configs
@@ -16,5 +17,9 @@ namespace CombatArena.Game.Configs
         [field: SerializeField] public float MovementSpeed { get; private set; } = 5f;
         [field: SerializeField] public float RotationSpeed { get; private set; } = 250f;
         //[field: SerializeField] public float StoppingDistance { get; private set; } = 2f;
+        [field: Header("Sounds")]
+        [field: SerializeField] public SoundData AttackSound { get; private set; }
+        [field: SerializeField] public SoundData DamageSound { get; private set; }
+        [field: SerializeField] public SoundData DeathSound { get; private set; }
     }
 }

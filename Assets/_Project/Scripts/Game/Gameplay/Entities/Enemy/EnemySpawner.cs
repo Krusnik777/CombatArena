@@ -16,6 +16,9 @@ namespace CombatArena.Game.Gameplay.Entities.Enemies
 
         private int _currentTime;
 
+        private Enemy _nextPreparedEnemy;
+        private Transform _pursueTarget;
+
         private IDisposable _secondsCounterDisposable;
 
         public EnemySpawner(EnemySpawnerView view, EnemyPool enemyPool, Func<bool> isSpawnAllowed = null)
@@ -30,12 +33,22 @@ namespace CombatArena.Game.Gameplay.Entities.Enemies
 
             _currentTime = _view.SpawnAtStart ? _view.SecondsUntilNextSpawn : 0;
 
-            _secondsCounterDisposable = Observable.Interval(TimeSpan.FromSeconds(1)).Subscribe(_ => CountAndTryToSpawn());
+            PrepareNext();
         }
 
         public void Dispose()
         {
             _secondsCounterDisposable?.Dispose();
+            _nextPreparedEnemy?.Dispose();
+        }
+
+        public void Start(Transform pursueTarget)
+        {
+            _secondsCounterDisposable?.Dispose();
+
+            _pursueTarget = pursueTarget;
+
+            _secondsCounterDisposable = Observable.Interval(TimeSpan.FromSeconds(1)).Subscribe(_ => CountAndTryToSpawn());
         }
 
         private void CountAndTryToSpawn()
@@ -64,10 +77,20 @@ namespace CombatArena.Game.Gameplay.Entities.Enemies
 
             _currentTime = 0;
 
-            var enemy = _enemyPool.GetRandomEnemy(_view.SpawnPoint.position);
+            var enemy = _nextPreparedEnemy;
+            enemy.ActivateAndAssignPurseTarget(_pursueTarget);
+            
             OnEnemySpawned.OnNext(enemy);
 
             _view.Effect.Play();
+
+            PrepareNext();
+        }
+
+        private void PrepareNext()
+        {
+            _nextPreparedEnemy = _enemyPool.GetRandomEnemy(_view.SpawnPoint.position);
+            _nextPreparedEnemy.Disable();
         }
     }
 }

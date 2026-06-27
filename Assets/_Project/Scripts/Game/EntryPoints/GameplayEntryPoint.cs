@@ -66,17 +66,21 @@ namespace CombatArena.Game.EntryPoints
             sceneContainer.RegisterInstance(GameplayTags.NEXT, nextInvoker as IEventInvoker);
             sceneContainer.RegisterInstance(GameplayTags.EXIT, exitInvoker as IEventInvoker);
 
-            var levelController = new GameplayLevelController(m_levelView, enterParameters.Runs);
-            sceneContainer.RegisterInstance(levelController);
-
             var particlesPool = new SimpleGameObjectsPool(m_particlesTransform);
             sceneContainer.RegisterInstance(GameplayTags.ParticlesPool, particlesPool);
+
+            var levelController = new GameplayLevelController(m_levelView, enterParameters.Runs);
+            var enemyPool = new EnemyPool(sceneContainer.Resolve<EnemyConfigsProvider>().EnemiesCollection, sceneContainer.Resolve<AudioService>().Sounds, m_enemiesTransform);
+            levelController.PrepareSpawners(enemyPool, particlesPool);
+            sceneContainer.RegisterInstance(levelController);
 
             var player = new Player(m_playerView, sceneContainer);
             m_playerView.Particles.Initialize(m_playerView.EventsCollector, particlesPool);
             sceneContainer.RegisterInstance(player);
-
-            sceneContainer.RegisterFactory(c => new EnemyPool(c.Resolve<EnemyConfigsProvider>().EnemiesCollection, m_enemiesTransform)).AsSingle();
+            var abilitiesProvider = sceneContainer.Resolve<AbilityConfigsProvider>();
+            var playerAbilitiesFactory = new Gameplay.PlayerAbilitiesFactory(abilitiesProvider.AbilitiesCollection);
+            var playerAbilities = playerAbilitiesFactory.Create(player);
+            sceneContainer.RegisterInstance(playerAbilities);
         }
 
         private void SetupUI(DIContainer sceneContainer)

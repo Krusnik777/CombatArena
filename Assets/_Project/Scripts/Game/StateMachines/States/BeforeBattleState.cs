@@ -25,9 +25,8 @@ namespace CombatArena.Game.StateMachines
             var levelController = _sceneContainer.Resolve<GameplayLevelController>();
             levelController.SetEnterGateEnabled(false);
 
-            // LATER: Spawn Player Here
             // LATER: SetPlayer As Not battle ready
-            // LATER: Play melodic music
+            _sceneContainer.Resolve<AudioService>().Music.Play(false);
 
             _sceneContainer.Resolve<UIWindowsProvider>().ShowScreen<BeforeBattleScreen>();
 

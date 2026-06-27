@@ -28,8 +28,6 @@ namespace CombatArena.Game.Gameplay.Entities.Player
 
         private CompositeDisposable _disposables;
 
-        
-
         public void Initialize(AnimatorEventsCollector eventsCollector, SimpleGameObjectsPool pool)
         {
             _disposables?.Dispose();

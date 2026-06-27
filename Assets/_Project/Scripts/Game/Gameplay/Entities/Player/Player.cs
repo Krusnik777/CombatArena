@@ -5,6 +5,7 @@ using CombatArena.Game.Services;
 using DI;
 using R3;
 using UnityEngine;
+using PlayerSounds = CombatArena.Game.Root.Sounds.PlayerSounds;
 
 namespace CombatArena.Game.Gameplay.Entities.Player
 {
@@ -14,10 +15,11 @@ namespace CombatArena.Game.Gameplay.Entities.Player
 
         public PlayerAbilities Abilities { get; private set; }
         public Health Health { get; }
-        public Transform Transform => _view.transform; 
+        public Transform Transform => _view.transform;
 
         private PlayerView _view;
         private GameInputService _gameInputService;
+        private SoundService _sounds;
         private PlayerAvatarConfig _avatarConfig;
         private PlayerHealthConfig _healthConfig;
 
@@ -26,16 +28,16 @@ namespace CombatArena.Game.Gameplay.Entities.Player
         private IEnemyDetector _enemyDetector;
         private HealthChangeVisualController _healthChangeVisualController;
 
-        private CompositeDisposable _abilitiesInputListenerDisposable;
-
-        private IDisposable _damageListenerDisposable;
-        private IDisposable _healthListenerDisposable;
         private IDisposable _attackFinishListenerDisposable;
+
+        private CompositeDisposable _abilitiesInputListenerDisposables;
+        private CompositeDisposable _changesListenerDisposables;
 
         public Player(PlayerView view, DIContainer sceneContainer)
         {
             _view = view;
             _gameInputService = sceneContainer.Resolve<GameInputService>();
+            _sounds = sceneContainer.Resolve<AudioService>().Sounds;
             var configsProvider = sceneContainer.Resolve<PlayerConfigsProvider>();
             _healthConfig = configsProvider.HealthConfig;
             _avatarConfig = configsProvider.AvatarConfig;
@@ -49,22 +51,26 @@ namespace CombatArena.Game.Gameplay.Entities.Player
 
             _healthChangeVisualController = new(sceneContainer.Resolve<SimpleGameObjectsPool>(Root.GameplayTags.ParticlesPool), Health, _view.Particles);
 
-            _healthListenerDisposable = Health.Value.Subscribe(OnHealthChange);
-            _damageListenerDisposable = _view.Damageable.OnHitted.Subscribe(TakeDamage);
+            _changesListenerDisposables = new()
+            {
+                Health.Value.Subscribe(OnHealthChange),
+                _view.Damageable.OnHitted.Subscribe(TakeDamage),
+                _view.EventsCollector.OnFootstep.Subscribe(OnStep)
+            };
         }
 
         public void Dispose()
         {
-            _abilitiesInputListenerDisposable?.Dispose();
+            _abilitiesInputListenerDisposables?.Dispose();
 
-            _damageListenerDisposable?.Dispose();
-            _healthListenerDisposable?.Dispose();
+            _changesListenerDisposables?.Dispose();
             _attackFinishListenerDisposable?.Dispose();
 
             Abilities?.Dispose();
             _currentDamageDealer?.Dispose();
             _enemyDetector?.Dispose();
             _healthChangeVisualController?.Dispose();
+            _view.Particles.Dispose();
         }
 
         public void AssignAbilities(PlayerAbilities abilitiesBundle)
@@ -72,9 +78,9 @@ namespace CombatArena.Game.Gameplay.Entities.Player
             Abilities = abilitiesBundle;
             _currentActiveAbility = null;
 
-            _abilitiesInputListenerDisposable?.Dispose();
+            _abilitiesInputListenerDisposables?.Dispose();
 
-            _abilitiesInputListenerDisposable = new()
+            _abilitiesInputListenerDisposables = new()
             {
                 _gameInputService.OnAbilityAPressed.Subscribe(_ => HandleAbilityAUse()),
                 _gameInputService.OnAbilityXPressed.Subscribe(_ => HandleAbilityXUse()),
@@ -93,13 +99,15 @@ namespace CombatArena.Game.Gameplay.Entities.Player
 
         public void Stop()
         {
-            _abilitiesInputListenerDisposable?.Dispose();
+            _abilitiesInputListenerDisposables?.Dispose();
             _attackFinishListenerDisposable?.Dispose();
             _enemyDetector?.Dispose();
+            _healthChangeVisualController?.ClearHitNumbers();
             _healthChangeVisualController?.Dispose();
 
             _view.Movement.SetActive(false);
             _view.Animator.SetActive(false);
+            _view.Particles.Dispose();
         }
 
         public Observable<bool> Attack(AttackAbilityConfig config)
@@ -127,6 +135,7 @@ namespace CombatArena.Game.Gameplay.Entities.Player
             if (config.AttackType == AttackType.BasicAttack)
             {
                 _currentDamageDealer = new SwordDamageDealer(Root.LayerMasks.Enemy, _view.Movement.LookTransform, config, _view.EventsCollector, _view.SwordTransform);
+                _currentDamageDealer.SubscribeToAttack(() => _sounds.Play(PlayerSounds.Attack));
 
                 _view.Animator.PlaySimpleAttack();
             }
@@ -134,11 +143,14 @@ namespace CombatArena.Game.Gameplay.Entities.Player
             if (config.AttackType == AttackType.AreaAttack)
             {
                 _currentDamageDealer = new AOEDamageDealer(Root.LayerMasks.Enemy, _view.transform, config, _view.EventsCollector);
+                _currentDamageDealer.SubscribeToAttack(() => _sounds.Play(PlayerSounds.AreaAttack));
 
                 Health.SetIgnoreDamage(true);
 
                 _view.Animator.PlaySuperAttack();
             }
+
+
 
             return finishedAttack;
         }
@@ -149,7 +161,7 @@ namespace CombatArena.Game.Gameplay.Entities.Player
 
             Health.SetIgnoreDamage(true);
             _view.DashEffects.Show();
-            // Play Dash Sound
+            _sounds.Play(PlayerSounds.Dash);
 
             _view.Movement.PerformDash(config, () =>
             {
@@ -191,9 +203,7 @@ namespace CombatArena.Game.Gameplay.Entities.Player
             {
                 Stop();
                 _view.Animator.PlayDeath();
-                // Death Sound
-                // Death Effect
-                // Dispose Only At Animation End
+                _sounds.Play(PlayerSounds.Death);
 
                 OnDeath?.OnNext(this);
             }
@@ -205,6 +215,14 @@ namespace CombatArena.Game.Gameplay.Entities.Player
             if (isBlocked) damage.Modifiers.Add(new ArmorDefenceModifier(_healthConfig.Armor));
 
             Health.TakeDamage(damage);
+
+            _sounds.Play(PlayerSounds.Damage);
+        }
+
+        private void OnStep(int legIndex)
+        {
+            int stepIndex = UnityEngine.Random.Range(0, PlayerSounds.Steps.Length);
+            _sounds.Play(PlayerSounds.Steps[stepIndex]);
         }
     }
 }

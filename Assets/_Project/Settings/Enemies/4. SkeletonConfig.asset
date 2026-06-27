@@ -21,3 +21,12 @@ MonoBehaviour:
   <AttackAbility>k__BackingField: {fileID: 11400000, guid: 7d4c435eeab06954390607de32e37c02, type: 2}
   <MovementSpeed>k__BackingField: 1.25
   <RotationSpeed>k__BackingField: 250
+  <AttackSound>k__BackingField:
+    name: Enemies/skeleton_attack
+    volume: 0.2
+  <DamageSound>k__BackingField:
+    name: Enemies/skeleton_damage
+    volume: 0.2
+  <DeathSound>k__BackingField:
+    name: Enemies/skeleton_death
+    volume: 0.2

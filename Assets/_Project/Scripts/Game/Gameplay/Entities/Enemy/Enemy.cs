@@ -1,6 +1,7 @@
 using System;
 using CombatArena.Game.Configs;
 using CombatArena.Game.Gameplay.HealthSystem;
+using CombatArena.Game.Services;
 using R3;
 using UnityEngine;
 
@@ -18,6 +19,7 @@ namespace CombatArena.Game.Gameplay.Entities.Enemies
 
         private EnemyConfig _config;
         private EnemyView _view;
+        private SoundService _sounds;
 
         private AttackAbility _attackAbility;
         private TargetPursuer _currentPursuer;
@@ -28,11 +30,12 @@ namespace CombatArena.Game.Gameplay.Entities.Enemies
         private IDisposable _healthListenerDisposable;
         private IDisposable _attackFinishListenerDisposable;
         private IDisposable _deathDisposable;
-        
-        public Enemy(EnemyConfig config, EnemyView view)
+
+        public Enemy(EnemyConfig config, EnemyView view, SoundService sounds)
         {
             _config = config;
             _view = view;
+            _sounds = sounds;
 
             _attackAbility = new AttackAbility(config.AttackAbility, this);
 
@@ -49,6 +52,20 @@ namespace CombatArena.Game.Gameplay.Entities.Enemies
         public void Dispose()
         {
             Stop();
+        }
+
+        public void Disable()
+        {
+            _view.Agent.enabled = false;
+            _view.gameObject.SetActive(false);
+        }
+
+        public void ActivateAndAssignPurseTarget(Transform target)
+        {
+            _view.gameObject.SetActive(true);
+            _view.Agent.enabled = true;
+
+            AssignPursueTarget(target);
         }
 
         public void AssignPursueTarget(Transform target)
@@ -70,6 +87,8 @@ namespace CombatArena.Game.Gameplay.Entities.Enemies
             _healthChangeVisualController = new(particlesPool, Health, _view.Particles);
         }
 
+        public void CleanupHitNumbers() => _healthChangeVisualController?.ClearHitNumbers();
+
         public void Stop()
         {
             _deathDisposable?.Dispose();
@@ -77,6 +96,7 @@ namespace CombatArena.Game.Gameplay.Entities.Enemies
             _view.Damageable.gameObject.SetActive(false);
             _view.ChosenEffect.SetActive(false);
             _view.Agent.enabled = false;
+            _view.Particles.Dispose();
 
             _view.UIHealth.gameObject.SetActive(false);
             _view.UIHealth?.Dispose();
@@ -113,6 +133,8 @@ namespace CombatArena.Game.Gameplay.Entities.Enemies
             });
 
             _currentDamageDealer = new AOEDamageDealer(Root.LayerMasks.Player, _view.transform, config, _view.EventsCollector);
+            _currentDamageDealer.SubscribeToAttack(() => _sounds.Play(_config.AttackSound));
+
             _view.Animator.PlayAttack();
 
             return finishedAttack;
@@ -129,8 +151,8 @@ namespace CombatArena.Game.Gameplay.Entities.Enemies
             {
                 Stop();
                 _view.Animator.PlayDeath();
-                // Death Sound
-                // Death Effect
+                _sounds.Play(_config.DeathSound);
+
                 _deathDisposable = Observable.Interval(TimeSpan.FromSeconds(3f)).Subscribe(_ =>
                 {
                     OnDeleted?.OnNext(this);
@@ -148,6 +170,8 @@ namespace CombatArena.Game.Gameplay.Entities.Enemies
             if (isBlocked) damage.Modifiers.Add(new ArmorDefenceModifier(_config.Armor));
 
             Health.TakeDamage(damage);
+
+            _sounds.Play(_config.DamageSound);
         }
     }
 }

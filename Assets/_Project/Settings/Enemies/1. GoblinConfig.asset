@@ -21,3 +21,12 @@ MonoBehaviour:
   <AttackAbility>k__BackingField: {fileID: 11400000, guid: 7ad403b4e8d85b645b61d85649824e71, type: 2}
   <MovementSpeed>k__BackingField: 3.5
   <RotationSpeed>k__BackingField: 250
+  <AttackSound>k__BackingField:
+    name: Enemies/goblin_attack
+    volume: 0.2
+  <DamageSound>k__BackingField:
+    name: Enemies/enemies_damage
+    volume: 0.2
+  <DeathSound>k__BackingField:
+    name: Enemies/goblin_death
+    volume: 0.2

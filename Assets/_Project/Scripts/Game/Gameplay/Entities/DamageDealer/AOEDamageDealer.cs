@@ -13,6 +13,8 @@ namespace CombatArena.Game.Gameplay.Entities
         private AttackAbilityConfig _attackConfig;
         private AnimatorEventsCollector _eventsCollector;
 
+        private Action _onAttack;
+
         private IDisposable _attackExecutedListenerDisposable;
 
         public AOEDamageDealer(LayerMask targetMask, Transform transform, AttackAbilityConfig config, AnimatorEventsCollector eventsCollector)
@@ -30,6 +32,11 @@ namespace CombatArena.Game.Gameplay.Entities
             _attackExecutedListenerDisposable?.Dispose();
         }
 
+        public void SubscribeToAttack(Action onAttack)
+        {
+            _onAttack += onAttack;
+        }
+
         private void DamageAllInRange()
         {
             //_attackExecutedListenerDisposable?.Dispose();
@@ -44,6 +51,8 @@ namespace CombatArena.Game.Gameplay.Entities
 
                 damageable?.Hit(damage);
             }
+
+            _onAttack?.Invoke();
         }
     }
 }

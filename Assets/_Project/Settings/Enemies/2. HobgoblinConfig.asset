@@ -21,3 +21,12 @@ MonoBehaviour:
   <AttackAbility>k__BackingField: {fileID: 11400000, guid: 5f5d0fd2ab4af3a4d9e942fbcc657457, type: 2}
   <MovementSpeed>k__BackingField: 1.75
   <RotationSpeed>k__BackingField: 250
+  <AttackSound>k__BackingField:
+    name: Enemies/hobgoblin_attack
+    volume: 0.2
+  <DamageSound>k__BackingField:
+    name: Enemies/enemies_damage
+    volume: 0.2
+  <DeathSound>k__BackingField:
+    name: Enemies/hobgoblin_death
+    volume: 0.2

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using CombatArena.Game.Configs;
+using CombatArena.Game.Services;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -9,13 +10,16 @@ namespace CombatArena.Game.Gameplay.Entities.Enemies
     public class EnemyPool : IDisposable
     {
         private EnemiesCollection _enemiesCollection;
+        private SoundService _soundService;
 
         private SimpleGameObjectsPool _viewsPool;
         private Dictionary<Enemy, EnemyView> _enemiesMap;
 
-        public EnemyPool(EnemiesCollection enemiesCollection, Transform poolParent)
+        public EnemyPool(EnemiesCollection enemiesCollection, SoundService soundService, Transform poolParent)
         {
             _enemiesCollection = enemiesCollection;
+            _soundService = soundService;
+
             _viewsPool = new SimpleGameObjectsPool(poolParent);
             _enemiesMap = new();
 
@@ -43,13 +47,13 @@ namespace CombatArena.Game.Gameplay.Entities.Enemies
             var enemyConfig = _enemiesCollection.AllEnemies[index];
 
             var enemyView = _viewsPool.Get(enemyConfig.PrefabName).GetComponent<EnemyView>();
-            enemyView.Agent.enabled = true;
             enemyView.Animator.ResetControllerState();
-            enemyView.Damageable.gameObject.SetActive(true);
 
             enemyView.transform.position = position;
-            var enemy = new Enemy(enemyConfig, enemyView);
+            enemyView.Damageable.gameObject.SetActive(true);
+            enemyView.Agent.enabled = true;
 
+            var enemy = new Enemy(enemyConfig, enemyView, _soundService);
             _enemiesMap.Add(enemy, enemyView);
 
             return enemy;

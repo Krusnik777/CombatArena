@@ -27,17 +27,14 @@ namespace CombatArena.Game.StateMachines
         public void Enter()
         {
             var player = _sceneContainer.Resolve<Player>();
-            var abilitiesProvider = _sceneContainer.Resolve<AbilityConfigsProvider>();
-            var playerAbilitiesFactory = new PlayerAbilitiesFactory(abilitiesProvider.AbilitiesCollection);
-            var playerAbilities = playerAbilitiesFactory.Create(player);
-            player.AssignAbilities(playerAbilities);
+            player.AssignAbilities(_sceneContainer.Resolve<PlayerAbilities>());
 
             var levelController = _sceneContainer.Resolve<GameplayLevelController>();
             levelController.AssignEnemyDetector(player.EnableEnemyDetector());
             levelController.SetEnterGateEnabled(true);
-            levelController.StartSpawners(_sceneContainer.Resolve<EnemyPool>(), _sceneContainer.Resolve<SimpleGameObjectsPool>(Root.GameplayTags.ParticlesPool), player.Transform);
+            levelController.StartSpawners(player.Transform);
 
-            // LATER: Play battle music
+            _sceneContainer.Resolve<AudioService>().Music.Play(true);
 
             var screen = _sceneContainer.Resolve<UIWindowsProvider>().ShowScreen<BattleScreen>();
             screen.Initialize(player, levelController);

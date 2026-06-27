@@ -11,8 +11,10 @@ namespace CombatArena.Game.Gameplay.Entities.Levels
         public Observable<int> OnEnemyDied => _targetEnemiesDeaths;
         public Observable<Enemy> EnemyDetectedByPlayer => _detectedEnemyByPlayer;
 
-        private const int _defaultTargetEnemiesDeaths = 10;
-        private const int _maxSpawnedEnemiesOnScene = 20;
+        private const int _minTargetEnemiesDeaths = 10;
+        private const int _maxTargetEnemiesDeaths = 50;
+        
+        private const int _maxSpawnedEnemiesOnScene = 10;
         private const int _enemiesExcess = 5;
 
         private GameplayLevelView _view;
@@ -20,6 +22,7 @@ namespace CombatArena.Game.Gameplay.Entities.Levels
         private ReactiveProperty<int> _targetEnemiesDeaths;
         private ReactiveProperty<Enemy> _detectedEnemyByPlayer;
 
+        private List<EnemySpawner> _spawners;
         private Dictionary<Enemy, (IDisposable, IDisposable)> _spawnedEnemiesMap;
         private EnemyPool _enemyPool;
         
@@ -29,8 +32,10 @@ namespace CombatArena.Game.Gameplay.Entities.Levels
         public GameplayLevelController(GameplayLevelView view, int runs)
         {
             _view = view;
-            _targetEnemiesDeaths = new(_defaultTargetEnemiesDeaths * (runs + 1));
+            _targetEnemiesDeaths = new(runs > 4 ? _maxTargetEnemiesDeaths : _minTargetEnemiesDeaths * (runs + 1));
             _detectedEnemyByPlayer = new();
+            
+            _spawners = new();
         }
 
         public void Dispose()
@@ -81,8 +86,9 @@ namespace CombatArena.Game.Gameplay.Entities.Levels
             _view.EnterGate.SetActive(state);
         }
 
-        public void StartSpawners(EnemyPool enemyPool, SimpleGameObjectsPool particlesPool, Transform pursueTarget)
+        public void PrepareSpawners(EnemyPool enemyPool, SimpleGameObjectsPool particlesPool)
         {
+            _spawners.Clear();
             _spawnerDisposables?.Dispose();
             _enemyPool?.Dispose();
 
@@ -93,16 +99,24 @@ namespace CombatArena.Game.Gameplay.Entities.Levels
             for (int i = 0; i < _view.EnemySpawnerViews.Length; i++)
             {
                 var spawner = new EnemySpawner(_view.EnemySpawnerViews[i], enemyPool, IsSpawnAllowed);
+                _spawners.Add(spawner);
                 _spawnerDisposables.Add(spawner);
                 _spawnerDisposables.Add(spawner.OnEnemySpawned.Subscribe(enemy =>
                 {
-                    enemy.AssignPursueTarget(pursueTarget);
                     enemy.ActivateParticles(particlesPool);
-                    
+    
                     _spawnedEnemiesMap.Add(enemy, (enemy.OnDeath.Subscribe(OnEnemyDead), enemy.OnDeleted.Subscribe(OnEnemyDeleted)));
 
                     if (_spawnedEnemiesMap.Count > _targetEnemiesDeaths.Value + _enemiesExcess) _spawnerDisposables?.Dispose();
                 }));
+            }
+        }
+
+        public void StartSpawners(Transform pursueTarget)
+        {
+            for (int i = 0; i < _spawners.Count; i++)
+            {
+                _spawners[i].Start(pursueTarget);
             }
         }
 
@@ -113,7 +127,9 @@ namespace CombatArena.Game.Gameplay.Entities.Levels
 
             foreach (var enemy in _spawnedEnemiesMap)
             {
+                enemy.Key.CleanupHitNumbers();
                 enemy.Key.Stop();
+
                 enemy.Value.Item1?.Dispose();
                 enemy.Value.Item2?.Dispose();
             }

@@ -17,6 +17,8 @@ namespace CombatArena.Game.Gameplay.Entities
         private AnimatorEventsCollector _eventsCollector;
         private Transform _swordTransform;
 
+        private Action _onAttack;
+
         private HashSet<IDamageable> _hittedDamageables;
 
         private IDisposable _attackStartedListenerDisposable;
@@ -44,6 +46,11 @@ namespace CombatArena.Game.Gameplay.Entities
             _attackExecutedListenerDisposable?.Dispose();
         }
 
+        public void SubscribeToAttack(Action onAttack)
+        {
+            _onAttack += onAttack;
+        }
+
         private void StartTrackingEnemies()
         {
             _attackStartedListenerDisposable?.Dispose();
@@ -61,6 +68,8 @@ namespace CombatArena.Game.Gameplay.Entities
                 var damage = DamageFactory.Create(_attackConfig);
                 damageable.Hit(damage);
             }
+
+            _onAttack?.Invoke();
 
             _hittedDamageables.Clear();
         }

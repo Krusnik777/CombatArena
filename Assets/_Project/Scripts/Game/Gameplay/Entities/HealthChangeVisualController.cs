@@ -42,6 +42,17 @@ namespace CombatArena.Game.Gameplay.Entities
             foreach (var disposable in _spawnedHitNumbersMap.Keys) disposable?.Dispose();
         }
 
+        public void ClearHitNumbers()
+        {
+            foreach (var spawned in _spawnedHitNumbersMap)
+            {
+                _pool.Return(spawned.Value.gameObject);
+                spawned.Key?.Dispose();
+            }
+
+            _spawnedHitNumbersMap?.Clear();
+        }
+
         private void OnDamage(Damage damage)
         {
             var uiDamage = _pool.Get(_effectsHolder.UIDamageInfoPrefab.gameObject).GetComponent<UIDamageInfo>();
@@ -62,7 +73,7 @@ namespace CombatArena.Game.Gameplay.Entities
             _effectsHolder.HitEffect.Play();
         }
 
-        private void OnHeal(int obj)
+        private void OnHeal(int value)
         {
             
         }

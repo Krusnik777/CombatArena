@@ -126,26 +126,8 @@ namespace CombatArena.Game.Root
 
         private void SetupAudioService()
         {
-            var mixer = Resources.Load<AudioMixer>("AudioMixer");
-            var sfxGroup = mixer.FindMatchingGroups("SFX")[0];
-            var bgmGroup = mixer.FindMatchingGroups("BGM")[0];
-
-            var audioSystemContainer = new GameObject("[AUDIO]").AddComponent<AudioListener>();
-
-            var soundsContainer = new GameObject("[SOUNDS]").AddComponent<AudioSource>();
-            soundsContainer.outputAudioMixerGroup = sfxGroup;
-            soundsContainer.transform.SetParent(audioSystemContainer.transform);
-            //var loopSoundsContainer = new GameObject("[SOUNDS_LOOP]").AddComponent<AudioSource>();
-            //loopSoundsContainer.outputAudioMixerGroup = sfxGroup;
-            //loopSoundsContainer.transform.SetParent(audioSystemContainer.transform);
-
-            AudioSource bgmContainer = new GameObject("[BACKGROUND_MUSIC]").AddComponent<AudioSource>();
-            bgmContainer.outputAudioMixerGroup = bgmGroup;
-            bgmContainer.transform.SetParent(audioSystemContainer.transform);
-
-            Object.DontDestroyOnLoad(audioSystemContainer);
-
-            // AudioService init
+            var audioService = new AudioService();
+            _rootContainer.RegisterInstance(audioService);
         }
 
         private void SetupInputServices()
